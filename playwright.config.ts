@@ -14,7 +14,8 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   expect: {
-    toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled' },
+    // Tight enough that a single swapped name fails; a 1% ratio let that through.
+    toHaveScreenshot: { maxDiffPixels: 60, animations: 'disabled' },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
