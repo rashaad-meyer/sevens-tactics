@@ -1,0 +1,48 @@
+.game-half-select {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.game-half-select__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.game-half-select__control {
+  position: relative;
+}
+
+.game-half-select__select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 56px;
+  padding: 0.35rem 3.25rem 0.25rem var(--space-4);
+  font-size: var(--text-select);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.game-half-select__select:active {
+  transform: scale(0.995);
+}
+
+.game-half-select__chevron {
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-right: 3px solid var(--color-ink);
+  border-bottom: 3px solid var(--color-ink);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}

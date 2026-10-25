@@ -1,0 +1,66 @@
+/*
+ * Design tokens. Single deliberate light theme: this app is read pitch-side in
+ * daylight, so everything is tuned for maximum contrast on a bright screen.
+ */
+:root {
+  color-scheme: light;
+
+  /* Chrome */
+  --color-bg: oklch(97% 0.008 95);
+  --color-surface: oklch(100% 0 0);
+  --color-ink: oklch(17% 0.02 250);
+  --color-ink-muted: oklch(40% 0.02 250);
+  --color-rule: oklch(86% 0.012 95);
+  --color-focus: oklch(55% 0.2 40);
+
+  /* Turf and markings */
+  --color-turf-1: oklch(64% 0.165 142);
+  --color-turf-2: oklch(60% 0.165 142);
+  --color-turf-edge: oklch(38% 0.11 142);
+  --color-line: oklch(100% 0 0);
+
+  /* Kits: fills carry the meaning, text sits on them at AAA contrast */
+  --color-girl: oklch(50% 0.22 350);
+  --color-girl-ink: oklch(100% 0 0);
+  --color-boy: oklch(36% 0.15 262);
+  --color-boy-ink: oklch(100% 0 0);
+  --color-gk: oklch(84% 0.17 88);
+  --color-gk-ink: var(--color-ink);
+  --color-neutral: oklch(97% 0 0);
+  --color-neutral-ink: var(--color-ink);
+
+  /* Name plates under the circles: white on green, dark text */
+  --color-plate: oklch(100% 0 0);
+  --color-plate-ink: var(--color-ink);
+
+  /* Type */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+  --font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  --text-sm: clamp(0.8125rem, 0.78rem + 0.2vw, 0.875rem);
+  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-select: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+  --text-title: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+
+  /* Rhythm */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --gutter: max(12px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.12), 0 8px 24px -12px oklch(0% 0 0 / 0.25);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 260ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --pitch-max-width: 480px;
+  --content-max-width: 720px;
+}

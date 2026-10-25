@@ -1,0 +1,121 @@
+.pitch {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  font-family: var(--font-display);
+  user-select: none;
+}
+
+.pitch__edge {
+  fill: var(--color-turf-edge);
+}
+
+.pitch__stripe-a {
+  fill: var(--color-turf-1);
+}
+
+.pitch__stripe-b {
+  fill: var(--color-turf-2);
+}
+
+.pitch__lines {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-linejoin: round;
+}
+
+.pitch__spot {
+  fill: var(--color-line);
+  stroke: none;
+}
+
+.pitch__goal {
+  fill: oklch(100% 0 0 / 0.35);
+  stroke: var(--color-line);
+}
+
+/* Markers ------------------------------------------------------------- */
+
+.marker {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.marker__body {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.formation .marker__body {
+  animation: marker-in var(--duration-normal) var(--ease-out-expo) both;
+  animation-delay: calc(var(--marker-index, 0) * 35ms);
+}
+
+@keyframes marker-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.marker__disc {
+  stroke: var(--color-line);
+  stroke-width: 1;
+  filter: drop-shadow(0 0.6px 0.6px oklch(0% 0 0 / 0.35));
+}
+
+.marker__code {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.marker--girl .marker__disc {
+  fill: var(--color-girl);
+}
+.marker--girl .marker__code {
+  fill: var(--color-girl-ink);
+}
+
+.marker--boy .marker__disc {
+  fill: var(--color-boy);
+}
+.marker--boy .marker__code {
+  fill: var(--color-boy-ink);
+}
+
+.marker--gk .marker__disc {
+  fill: var(--color-gk);
+  stroke-dasharray: 2 1.2;
+  stroke: var(--color-ink);
+  stroke-width: 0.9;
+}
+.marker--gk .marker__code {
+  fill: var(--color-gk-ink);
+}
+
+.marker--neutral .marker__disc {
+  fill: var(--color-neutral);
+  stroke: var(--color-ink);
+  stroke-width: 0.8;
+}
+.marker--neutral .marker__code {
+  fill: var(--color-neutral-ink);
+}
+
+.marker__plate rect {
+  fill: var(--color-plate);
+  stroke: var(--color-ink);
+  stroke-width: 0.35;
+}
+
+.marker__plate text {
+  fill: var(--color-plate-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
