@@ -35,8 +35,8 @@ test.describe('visual regression', () => {
 
   for (const [drill, step, count, side] of [
     ['attacking-1', 7, 8, 'left'],
-    ['attacking-2', 7, 9, 'left'],
-    ['attacking-2', 7, 9, 'right'],
+    ['attacking-2', 7, 8, 'left'],
+    ['attacking-2', 7, 8, 'right'],
   ] as const) {
     test(`${drill} ${side} at step ${step} at 375px`, async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 812 })

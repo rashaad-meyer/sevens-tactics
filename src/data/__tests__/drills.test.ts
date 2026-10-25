@@ -96,18 +96,17 @@ describe('attacking pattern 2', () => {
     expect(last.ball.y).toBeLessThan(4)
   })
 
-  it('CM comes close before receiving, then LM runs up the line and gets the through ball', () => {
+  it('CM holds his position to receive, then LM runs up the line and gets the through ball', () => {
     const defenderReceives = frames2.findIndex((f) => f.ballHolder === 'LCB')
-    const cmClose = frames2.findIndex((f) => f.positions.CM.y > start.CM.y + 15)
     const cmReceives = frames2.findIndex((f) => f.ballHolder === 'CM')
-    expect(defenderReceives).toBeGreaterThan(0)
-    expect(cmClose).toBeGreaterThan(defenderReceives)
     const lmRuns = frames2.findIndex((f) => f.positions.LM.y < start.LM.y - 15)
     const lmReceives = frames2.findIndex((f) => f.ballHolder === 'LM')
-    expect(cmClose).toBeGreaterThan(0)
-    expect(cmReceives).toBeGreaterThan(cmClose)
+    expect(defenderReceives).toBeGreaterThan(0)
+    expect(cmReceives).toBeGreaterThan(defenderReceives)
     expect(lmRuns).toBeGreaterThan(cmReceives)
     expect(lmReceives).toBeGreaterThan(lmRuns)
+    // The CM does not move until the runs into the box.
+    for (const f of frames2.slice(0, lmReceives + 1)) expect(f.positions.CM).toEqual(start.CM)
     // LM stays near the left touchline all the way up.
     for (const f of frames2.slice(lmRuns)) expect(f.positions.LM.x).toBeLessThan(16)
   })

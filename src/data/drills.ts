@@ -121,15 +121,9 @@ export const DRILLS: readonly Drill[] = Object.freeze([
         durationMs: 600,
       },
       {
-        caption: 'The CM comes in close to the defender to receive.',
-        move: { CM: { x: 40, y: 102 } },
-        ball: { holder: 'LCB' },
-        durationMs: 700,
-      },
-      {
         caption: 'Defender plays it into the CM.',
         ball: { holder: 'CM' },
-        durationMs: 600,
+        durationMs: 700,
       },
       {
         caption: 'The left midfielder makes a run up the line.',
