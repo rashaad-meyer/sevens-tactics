@@ -8,13 +8,17 @@ const pattern1 = getDrill('attacking-1')!
 const frames = resolveDrillFrames(pattern1)
 
 describe('attacking pattern 1', () => {
-  it('starts with the ball at the GK and the left defender at the corner of the box', () => {
+  it('starts with the ball at the GK and both defenders at the corners of the box', () => {
     const first = frames[0]!
     expect(first.durationMs).toBe(0)
     expect(first.ballHolder).toBe('GK')
     expect(first.ball).toEqual({ x: 50 + BALL_OFFSET.x, y: 130 + BALL_OFFSET.y })
     expect(first.positions.LCB.x).toBeLessThan(30)
+    expect(first.positions.RCB.x).toBeGreaterThan(70)
     expect(first.positions.LCB.y).toBeGreaterThan(118)
+    expect(first.positions.RCB.y).toBe(first.positions.LCB.y)
+    // Mirrored around the centre line.
+    expect(first.positions.LCB.x + first.positions.RCB.x).toBe(100)
   })
 
   it('passes GK → LCB → LM → CM → ST and ends with a shot', () => {

@@ -47,10 +47,10 @@ export const DRILLS: readonly Drill[] = Object.freeze([
     name: 'Attacking Pattern 1',
     description:
       'Build down the left: GK to the defender, into the dropping wide midfielder, inside to the CM, through ball for the striker.',
-    start: { ...ATTACK_START, LCB: { x: 27, y: 123 } },
+    start: { ...ATTACK_START, LCB: { x: 27, y: 123 }, RCB: { x: 73, y: 123 } },
     steps: [
       {
-        caption: 'Set up. GK has the ball and the left defender takes the corner of the box.',
+        caption: 'Set up. GK has the ball and both defenders take the corners of the box.',
         ball: { holder: 'GK' },
         durationMs: 0,
       },
