@@ -31,16 +31,19 @@ Playwright browsers are installed once with `pnpm exec playwright install`.
 
 ## Deploy to S3
 
+Live site: http://sevens-tactics.s3-website.af-south-1.amazonaws.com
+
 The app uses hash routing (`/#/sheet/1/2`) and relative asset paths, so it works
-from a plain S3 static website bucket with no redirect rules.
+from a plain S3 static website bucket with no redirect rules. Deploys are manual:
 
 ```bash
-pnpm build
-aws s3 sync dist/ s3://YOUR_BUCKET --delete
+pnpm deploy   # builds, then syncs dist/ to s3://sevens-tactics (af-south-1)
 ```
 
-Set the bucket's index document to `index.html`. Deep links such as
-`https://your-bucket/#/sheet/4/2` resolve without an error document.
+Requires the AWS CLI with credentials for the bucket's account. The bucket has
+static website hosting on with `index.html` as both index and error document,
+and a public-read bucket policy. Deep links such as `/#/sheet/4/2` resolve
+client-side.
 
 ## Updating the team sheets
 
