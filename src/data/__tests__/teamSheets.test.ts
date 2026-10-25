@@ -5,16 +5,16 @@ import { countGirlsOnPitch, getBench, getHalvesPlayed, getLineupPlacements } fro
 import { MIN_GIRLS_ON_PITCH, TEAM_SHEETS } from '../teamSheets'
 import type { SheetKey, SlotId } from '../types'
 
-/** Bench lists copied verbatim from the corrected reference HTML. */
+/** Bench lists from the corrected reference HTML, with G1H2 and G4H2 swapped. */
 const EXPECTED_BENCH: Record<SheetKey, string[]> = {
   g1h1: ['Laura', 'Laurie Ann', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'],
-  g1h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Angelo', 'Rashaad', 'Alex'],
+  g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad', 'James'],
   g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Alex', 'Tumelo', 'Rashaad', 'James'],
   g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Jayden', 'Angelo', 'Alex'],
   g3h1: ['Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo', 'Rashaad', 'James'],
   g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Angelo', 'Adam'],
   g4h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Adam', 'Angelo', 'Tumelo'],
-  g4h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad', 'James'],
+  g4h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Angelo', 'Rashaad', 'Alex'],
 }
 
 const GIRL_SLOTS: readonly SlotId[] = ['ST', 'LM', 'RM']
@@ -55,9 +55,11 @@ describe('team sheet data integrity', () => {
     expect(all).toEqual(SQUAD.map((p) => p.id).sort())
   })
 
-  it('carries the later line-up edits', () => {
+  it('carries the later line-up edits and the G1H2/G4H2 swap', () => {
+    const g4h2 = TEAM_SHEETS.find((s) => s.key === 'g4h2')!.lineup
+    expect(g4h2).toMatchObject({ ST: 'adam', CM: 'james', RCB: 'tumelo', LCB: 'declan' })
     const g1h2 = TEAM_SHEETS.find((s) => s.key === 'g1h2')!.lineup
-    expect(g1h2).toMatchObject({ ST: 'adam', CM: 'james', RCB: 'tumelo', LCB: 'declan' })
+    expect(g1h2).toMatchObject({ ST: 'laura', LM: 'maria', CM: 'tumelo', RM: 'hannah', LCB: 'declan', RCB: 'alex' })
     const g3h2 = TEAM_SHEETS.find((s) => s.key === 'g3h2')!.lineup
     expect(g3h2).toMatchObject({ ST: 'rashaad', CM: 'james' })
   })

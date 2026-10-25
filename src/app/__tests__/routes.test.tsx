@@ -67,7 +67,7 @@ describe('app routing', () => {
     const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
     const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!
     expect(within(adamRow).getAllByRole('cell').map((c) => c.textContent)).toEqual([
-      '1,1', '1,2', '2,1', '2,2', '', '', '',
+      '1,1', '2,1', '2,2', '4,2', '', '', '',
     ])
     expect(within(table).getAllByRole('rowheader')).toHaveLength(14)
   })

@@ -97,7 +97,7 @@ describe('getAppearances', () => {
       'Jayden', 'Josh', 'Laura', 'Laurie Ann', 'Maria', 'Rashaad', 'Tumelo',
     ])
     const adam = rows.find((r) => r.player.name === 'Adam')!
-    expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '1,2', '2,1', '2,2'])
+    expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '2,1', '2,2', '4,2'])
     const jayden = rows.find((r) => r.player.name === 'Jayden')!
     expect(jayden.appearances.map(formatAppearance)).toEqual([
       '1,1 GK', '1,2 GK', '2,1', '3,1 GK', '3,2 GK', '4,1 GK', '4,2 GK',
