@@ -3,6 +3,15 @@ import type { DrillFrame } from '../data/drills'
 
 /** Pause on each frame after the movement finishes, so a step can be read. */
 export const HOLD_MS = 700
+/** Longer pause on the final frame before looping back to the start. */
+export const END_HOLD_MS = 1800
+
+export interface DrillPlaybackOptions {
+  /** Start playing as soon as the drill mounts. */
+  readonly autoplay?: boolean
+  /** Return to the first frame after the last one instead of stopping. */
+  readonly loop?: boolean
+}
 
 export interface DrillPlayback {
   readonly index: number
@@ -23,22 +32,29 @@ function clamp(index: number, count: number): number {
   return Math.min(Math.max(index, 0), count - 1)
 }
 
-/** Steps through drill frames manually or on a timer. */
-export function useDrillPlayback(frames: readonly DrillFrame[]): DrillPlayback {
+/** Steps through drill frames manually or on a timer. Manual steps pause playback. */
+export function useDrillPlayback(
+  frames: readonly DrillFrame[],
+  { autoplay = false, loop = false }: DrillPlaybackOptions = {},
+): DrillPlayback {
   const count = frames.length
   const [index, setIndex] = useState(0)
-  const [playRequested, setPlaying] = useState(false)
+  const [playRequested, setPlaying] = useState(autoplay)
   const isLast = index >= count - 1
-  // Playback is over once the last frame is reached; no state write needed.
-  const playing = playRequested && !isLast
+  // Without looping, playback is over once the last frame is reached.
+  const playing = playRequested && (loop || !isLast)
 
   useEffect(() => {
     if (!playing) return undefined
+    if (isLast) {
+      const timer = setTimeout(() => setIndex(0), END_HOLD_MS)
+      return () => clearTimeout(timer)
+    }
     const upcoming = frames[index + 1]
     const delay = (upcoming?.durationMs ?? 0) + HOLD_MS
     const timer = setTimeout(() => setIndex((i) => clamp(i + 1, count)), delay)
     return () => clearTimeout(timer)
-  }, [playing, index, frames, count])
+  }, [playing, isLast, index, frames, count])
 
   const goTo = useCallback(
     (target: number) => {

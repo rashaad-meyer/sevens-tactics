@@ -15,7 +15,7 @@ interface DrillPlayerProps {
 /** Steps a drill through its frames; players and ball slide between them. */
 export function DrillPlayer({ drill }: DrillPlayerProps) {
   const frames = resolveDrillFrames(drill)
-  const playback = useDrillPlayback(frames)
+  const playback = useDrillPlayback(frames, { autoplay: true, loop: true })
   const { frame } = playback
   const layerStyle = { '--step-duration': `${frame.durationMs}ms` } as CSSProperties
 

@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DrillFrame } from '../../data/drills'
-import { HOLD_MS, useDrillPlayback } from '../useDrillPlayback'
+import { END_HOLD_MS, HOLD_MS, useDrillPlayback } from '../useDrillPlayback'
 
 const positions = {
   ST: { x: 0, y: 0 }, LM: { x: 0, y: 0 }, CM: { x: 0, y: 0 }, RM: { x: 0, y: 0 },
@@ -63,6 +63,30 @@ describe('useDrillPlayback', () => {
     act(() => result.current.play())
     expect(result.current.index).toBe(0)
     expect(result.current.playing).toBe(true)
+  })
+
+  it('autoplays and loops back to the start after the end hold when asked', () => {
+    const { result } = renderHook(() => useDrillPlayback(FRAMES, { autoplay: true, loop: true }))
+    expect(result.current.playing).toBe(true)
+    act(() => vi.advanceTimersByTime(500 + HOLD_MS))
+    expect(result.current.index).toBe(1)
+    act(() => vi.advanceTimersByTime(300 + HOLD_MS))
+    expect(result.current.index).toBe(2)
+    expect(result.current.playing).toBe(true)
+    act(() => vi.advanceTimersByTime(END_HOLD_MS - 1))
+    expect(result.current.index).toBe(2)
+    act(() => vi.advanceTimersByTime(1))
+    expect(result.current.index).toBe(0)
+    expect(result.current.playing).toBe(true)
+  })
+
+  it('a manual step pauses autoplay', () => {
+    const { result } = renderHook(() => useDrillPlayback(FRAMES, { autoplay: true, loop: true }))
+    act(() => result.current.next())
+    expect(result.current.index).toBe(1)
+    expect(result.current.playing).toBe(false)
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(result.current.index).toBe(1)
   })
 
   it('throws without frames', () => {

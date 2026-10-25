@@ -99,6 +99,9 @@ describe('app routing', () => {
     await user.selectOptions(screen.getByRole('combobox', { name: 'Tactic' }), 'Attacking Pattern 1')
     expect(router.state.location.pathname).toBe('/tactics/attacking-1')
     expect(await screen.findByRole('heading', { name: 'Attacking Pattern 1 Pattern' })).toBeInTheDocument()
+    // Drills autoplay; pause so the assertions below are deterministic.
+    await user.click(screen.getByRole('button', { name: 'Pause' }))
+    await user.click(screen.getByRole('button', { name: 'Go to step 1' }))
     expect(screen.getByText(/Step 1\/9/)).toBeInTheDocument()
     const ball = screen.getByTestId('ball')
     expect(ball).toHaveStyle({ transform: 'translate(56px, 135px)' })

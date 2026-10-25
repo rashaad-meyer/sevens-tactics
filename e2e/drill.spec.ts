@@ -1,18 +1,28 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+/** Drills autoplay on open; park on step 1 so position assertions are stable. */
+async function openPaused(page: Page) {
+  await page.goto('/#/tactics/attacking-1')
+  await page.getByRole('button', { name: 'Go to step 1' }).click()
+  await expect(page.getByText('Step 1/9')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Play' })).toBeVisible()
+}
 
 test.describe('attacking pattern 1', () => {
-  test('is in the tactics dropdown under Patterns', async ({ page }) => {
+  test('is in the tactics dropdown under Patterns and starts playing on its own', async ({ page }) => {
     await page.goto('/#/tactics')
     const select = page.getByRole('combobox', { name: 'Tactic' })
     await expect(select.locator('optgroup[label="Patterns"] option')).toHaveText(['Attacking Pattern 1'])
     await select.selectOption('Attacking Pattern 1')
     await expect(page).toHaveURL(/#\/tactics\/attacking-1$/)
-    await expect(page.getByText('Step 1/9')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible()
     await expect(page.getByTestId('ball')).toBeVisible()
+    // It advances without any click.
+    await expect(page.getByText('Step 2/9')).toBeVisible({ timeout: 5_000 })
   })
 
-  test('stepping moves the ball and the players', async ({ page }) => {
-    await page.goto('/#/tactics/attacking-1')
+  test('stepping manually pauses and moves the ball and the players', async ({ page }) => {
+    await openPaused(page)
     const ball = page.getByTestId('ball')
     const lm = page.getByRole('img', { name: /Left midfield/ })
     await expect(ball).toHaveAttribute('style', /translate\(56px, 135px\)/)
@@ -30,16 +40,25 @@ test.describe('attacking pattern 1', () => {
     await expect(page.getByRole('button', { name: 'Next' })).toBeDisabled()
   })
 
-  test('play runs through to the end and offers replay', async ({ page }) => {
+  test('autoplay runs to the shot and loops back to the start', async ({ page }) => {
     await page.goto('/#/tactics/attacking-1')
-    await page.getByRole('button', { name: 'Play' }).click()
-    await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible()
     await expect(page.getByText('Shot on goal.')).toBeVisible({ timeout: 20_000 })
-    await expect(page.getByRole('button', { name: 'Replay' })).toBeVisible()
+    await expect(page.getByText('Step 1/9')).toBeVisible({ timeout: 5_000 })
+    await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible()
+  })
+
+  test('pause stops it and play resumes', async ({ page }) => {
+    await page.goto('/#/tactics/attacking-1')
+    await page.getByRole('button', { name: 'Pause' }).click()
+    const step = await page.locator('.drill__step').textContent()
+    await page.waitForTimeout(2_500)
+    await expect(page.locator('.drill__step')).toHaveText(step!)
+    await page.getByRole('button', { name: 'Play' }).click()
+    await expect(page.locator('.drill__step')).not.toHaveText(step!, { timeout: 5_000 })
   })
 
   test('ball and players transition on transform for the step duration', async ({ page }) => {
-    await page.goto('/#/tactics/attacking-1')
+    await openPaused(page)
     await page.getByRole('button', { name: 'Next' }).click()
     const ballTransition = await page
       .getByTestId('ball')
