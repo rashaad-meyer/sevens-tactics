@@ -94,6 +94,7 @@
 }
 
 .summary__card {
+  min-width: 0; /* let the card shrink so wide tables scroll inside it, not the page */
   background: var(--color-surface);
   border: 1.5px solid var(--color-ink);
   border-radius: var(--radius-md);
@@ -139,6 +140,71 @@
   padding-left: 1.25rem;
   display: grid;
   gap: var(--space-2);
+}
+
+/* Who plays when ----------------------------------------------------- */
+
+.summary__hint {
+  margin: 0 0 var(--space-3);
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.summary__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-inline: calc(var(--space-4) * -1);
+  padding-inline: var(--space-4);
+}
+
+.appearances {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+}
+
+.appearances th,
+.appearances td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-rule);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.appearances thead th {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-muted);
+  border-bottom: 2px solid var(--color-ink);
+}
+
+.appearances tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--color-surface);
+  text-align: left;
+  font-weight: 600;
+  padding-left: 0;
+}
+
+.appearances td {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-base);
+}
+
+.appearances__gk {
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+.appearances tr:last-child th,
+.appearances tr:last-child td {
+  border-bottom: 0;
 }
 
 @media (min-width: 640px) {

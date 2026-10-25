@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { displayName, getPlayer } from '../players'
 import {
+  formatAppearance,
   formatSheetLabel,
+  getAppearances,
   getAdjacentSheet,
   getSheet,
   getSheetOptions,
@@ -84,5 +86,31 @@ describe('players', () => {
   it('throws for an unknown id', () => {
     // @ts-expect-error deliberately invalid id
     expect(() => getPlayer('nobody')).toThrow(/Unknown player/)
+  })
+})
+
+describe('getAppearances', () => {
+  it('lists players alphabetically with their halves in playing order', () => {
+    const rows = getAppearances()
+    expect(rows.map((r) => r.player.name)).toEqual([
+      'Adam', 'Alex', 'Angelo', 'Cass', 'Declan', 'Hannah', 'James',
+      'Jayden', 'Josh', 'Laura', 'Laurie Ann', 'Maria', 'Rashaad', 'Tumelo',
+    ])
+    const adam = rows.find((r) => r.player.name === 'Adam')!
+    expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '1,2', '2,1', '2,2'])
+    const jayden = rows.find((r) => r.player.name === 'Jayden')!
+    expect(jayden.appearances.map(formatAppearance)).toEqual([
+      '1,1 GK', '1,2 GK', '2,1', '3,1 GK', '3,2 GK', '4,1 GK', '4,2 GK',
+    ])
+    const declan = rows.find((r) => r.player.name === 'Declan')!
+    expect(declan.appearances.map(formatAppearance)).toEqual(['1,2', '2,1 GK', '2,2 GK', '3,2', '4,2'])
+  })
+
+  it('agrees with the halves-played totals', () => {
+    for (const row of getAppearances()) {
+      expect(row.appearances.length).toBeGreaterThan(0)
+      expect(row.appearances.length).toBeLessThanOrEqual(8)
+    }
+    expect(getAppearances().reduce((n, r) => n + r.appearances.length, 0)).toBe(8 * 7)
   })
 })

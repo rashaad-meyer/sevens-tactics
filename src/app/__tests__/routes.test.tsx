@@ -60,9 +60,16 @@ describe('app routing', () => {
   it('renders the summary page with derived halves', async () => {
     renderAt('/summary')
     expect(await screen.findByRole('heading', { name: 'Summary' })).toBeInTheDocument()
-    const jayden = screen.getByText('Jayden').closest('tr')!
+    const boys = screen.getByRole('region', { name: 'Halves played – boys' })
+    const jayden = within(boys).getByText('Jayden').closest('tr')!
     expect(jayden.textContent).toContain('1 (+6 in goal)')
     expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
+    const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
+    const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!
+    expect(within(adamRow).getAllByRole('cell').map((c) => c.textContent)).toEqual([
+      '1,1', '1,2', '2,1', '2,2', '', '', '',
+    ])
+    expect(within(table).getAllByRole('rowheader')).toHaveLength(14)
   })
 
   it('redirects /tactics to the Attack shape and swaps the header select', async () => {

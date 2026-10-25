@@ -1,3 +1,4 @@
+import { AppearancesTable } from '../components/summary/AppearancesTable'
 import { getHalvesPlayed } from '../data/selectors'
 import { SELECTION_RULES } from '../data/teamSheets'
 import type { HalvesPlayed } from '../data/types'
@@ -34,6 +35,7 @@ export function SummaryPage() {
     <>
       <h1 className="page-title display">Summary</h1>
       <div className="summary">
+        <AppearancesTable />
         <HalvesTable title="girls" rows={girls} />
         <HalvesTable title="boys" rows={boys} />
         <section className="summary__card summary__card--wide" aria-labelledby="summary-rules">

@@ -3,17 +3,25 @@ import { expect, test } from '@playwright/test'
 const WIDTHS = [320, 375, 768, 1024, 1440, 1920] as const
 
 test.describe('responsive layout', () => {
+  const PAGES = [
+    { path: '/#/sheet/1/1', ready: '.formation .marker' },
+    { path: '/#/summary', ready: '.appearances' },
+    { path: '/#/tactics/attacking-1', ready: '.drill .marker' },
+  ] as const
+
   for (const width of WIDTHS) {
-    test(`no horizontal overflow at ${width}px`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 800 })
-      await page.goto('/#/sheet/1/1')
-      await expect(page.locator('.formation .marker')).toHaveCount(7)
-      const overflow = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
-      }))
-      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth)
-    })
+    for (const { path, ready } of PAGES) {
+      test(`no horizontal overflow at ${width}px on ${path}`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 })
+        await page.goto(path)
+        await expect(page.locator(ready).first()).toBeVisible()
+        const overflow = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        }))
+        expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth)
+      })
+    }
   }
 
   test('the whole pitch fits on a small phone screen without scrolling', async ({ page }) => {

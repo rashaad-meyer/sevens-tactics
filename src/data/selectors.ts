@@ -104,3 +104,32 @@ export function getHalvesPlayed(sheets: readonly TeamSheet[] = TEAM_SHEETS): rea
     return { player, outfield: appearances.length - inGoal, inGoal }
   })
 }
+
+export interface Appearance {
+  readonly game: GameNumber
+  readonly half: HalfNumber
+  readonly inGoal: boolean
+}
+
+export interface PlayerAppearances {
+  readonly player: Player
+  readonly appearances: readonly Appearance[]
+}
+
+/** Each player's halves in playing order, players alphabetical by name. */
+export function getAppearances(sheets: readonly TeamSheet[] = TEAM_SHEETS): readonly PlayerAppearances[] {
+  return [...SQUAD]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((player) => ({
+      player,
+      appearances: sheets.flatMap((sheet) =>
+        (Object.entries(sheet.lineup) as [SlotId, Player['id']][])
+          .filter(([, id]) => id === player.id)
+          .map(([slot]) => ({ game: sheet.game, half: sheet.half, inGoal: slot === GK_SLOT })),
+      ),
+    }))
+}
+
+export function formatAppearance(appearance: Appearance): string {
+  return `${appearance.game},${appearance.half}${appearance.inGoal ? ' GK' : ''}`
+}
