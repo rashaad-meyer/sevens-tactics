@@ -33,6 +33,14 @@ test.describe('visual regression', () => {
     })
   }
 
+  test('attacking pattern 1 first step at 375px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/#/tactics/attacking-1')
+    await page.evaluate(() => document.fonts.ready)
+    await expect(page.getByTestId('ball')).toBeVisible()
+    await expect(page).toHaveScreenshot('tactics-attacking-1-375.png', { fullPage: true })
+  })
+
   test('summary page at 375px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 })
     await page.goto('/#/summary')

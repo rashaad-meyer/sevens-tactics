@@ -92,6 +92,29 @@ describe('app routing', () => {
     })
   })
 
+  it('plays Attacking Pattern 1 with a ball that moves between steps', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/tactics/attack')
+    await screen.findByRole('heading', { name: 'Attack 2-3-1' })
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Tactic' }), 'Attacking Pattern 1')
+    expect(router.state.location.pathname).toBe('/tactics/attacking-1')
+    expect(await screen.findByRole('heading', { name: 'Attacking Pattern 1 Pattern' })).toBeInTheDocument()
+    expect(screen.getByText(/Step 1\/9/)).toBeInTheDocument()
+    const ball = screen.getByTestId('ball')
+    expect(ball).toHaveStyle({ transform: 'translate(56px, 135px)' })
+    expect(screen.getByRole('img', { name: 'Goalkeeper (on the ball)' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+    expect(screen.getByText(/Step 2\/9/)).toBeInTheDocument()
+    expect(ball).toHaveStyle({ transform: 'translate(33px, 128px)' })
+    expect(screen.getByRole('img', { name: 'Left defender (on the ball)' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Go to step 9' }))
+    expect(screen.getByText('Shot on goal.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Replay' })).toBeInTheDocument()
+  })
+
   it('falls back to Attack for an unknown tactic', async () => {
     const router = renderAt('/tactics/park-the-bus')
     expect(await screen.findByRole('heading', { name: 'Attack 2-3-1' })).toBeInTheDocument()

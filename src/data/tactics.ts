@@ -1,15 +1,13 @@
+import { DRILLS, type Drill, type DrillId } from './drills'
 import { FORMATION_231 } from './formation'
-import type { SlotId } from './types'
+import type { PitchPoint, SlotId } from './types'
 
-export type TacticId = 'attack' | 'defend-1' | 'defend-2'
+export type ShapeId = 'attack' | 'defend-1' | 'defend-2'
+export type TacticId = ShapeId | DrillId
 
-export interface PitchPoint {
-  readonly x: number
-  readonly y: number
-}
-
-export interface Tactic {
-  readonly id: TacticId
+export interface ShapeTactic {
+  readonly kind: 'shape'
+  readonly id: ShapeId
   readonly name: string
   /** Shape as seen from the back, e.g. "2-3-1". */
   readonly shape: string
@@ -18,16 +16,19 @@ export interface Tactic {
   readonly positions: Readonly<Record<SlotId, PitchPoint>>
 }
 
+export type Tactic = ShapeTactic | Drill
+
 const ATTACK_POSITIONS = Object.fromEntries(
   FORMATION_231.map((slot) => [slot.slotId, { x: slot.x, y: slot.y }]),
 ) as Record<SlotId, PitchPoint>
 
 /**
- * Shapes the same seven slots move into. Markers keep their slot identity so
- * the UI can animate players between tactics.
+ * Static shapes the same seven slots move into. Markers keep their slot
+ * identity so the UI can animate players between tactics.
  */
-export const TACTICS: readonly Tactic[] = Object.freeze([
+export const SHAPES: readonly ShapeTactic[] = Object.freeze([
   {
+    kind: 'shape',
     id: 'attack',
     name: 'Attack',
     shape: '2-3-1',
@@ -35,6 +36,7 @@ export const TACTICS: readonly Tactic[] = Object.freeze([
     positions: ATTACK_POSITIONS,
   },
   {
+    kind: 'shape',
     id: 'defend-1',
     name: 'Defend 1',
     shape: '4-2-0',
@@ -50,6 +52,7 @@ export const TACTICS: readonly Tactic[] = Object.freeze([
     },
   },
   {
+    kind: 'shape',
     id: 'defend-2',
     name: 'Defend 2',
     shape: '3-3-0',
@@ -64,7 +67,9 @@ export const TACTICS: readonly Tactic[] = Object.freeze([
       GK: { x: 50, y: 130 },
     },
   },
-] as const satisfies readonly Tactic[])
+] as const satisfies readonly ShapeTactic[])
+
+export const TACTICS: readonly Tactic[] = Object.freeze([...SHAPES, ...DRILLS])
 
 const firstTactic = TACTICS[0]
 if (!firstTactic) {
@@ -76,8 +81,8 @@ export function getTactic(id: string | undefined): Tactic | undefined {
   return TACTICS.find((tactic) => tactic.id === id)
 }
 
-export function formatTacticLabel(tactic: Pick<Tactic, 'name' | 'shape'>): string {
-  return `${tactic.name} · ${tactic.shape}`
+export function formatTacticLabel(tactic: Tactic): string {
+  return tactic.kind === 'shape' ? `${tactic.name} · ${tactic.shape}` : tactic.name
 }
 
 export interface TacticOption {
@@ -85,6 +90,22 @@ export interface TacticOption {
   readonly label: string
 }
 
+export interface TacticOptionGroup {
+  readonly label: string
+  readonly options: readonly TacticOption[]
+}
+
+function toOption(tactic: Tactic): TacticOption {
+  return { value: tactic.id, label: formatTacticLabel(tactic) }
+}
+
 export function getTacticOptions(): readonly TacticOption[] {
-  return TACTICS.map((tactic) => ({ value: tactic.id, label: formatTacticLabel(tactic) }))
+  return TACTICS.map(toOption)
+}
+
+export function getTacticOptionGroups(): readonly TacticOptionGroup[] {
+  return [
+    { label: 'Shapes', options: SHAPES.map(toOption) },
+    { label: 'Patterns', options: DRILLS.map(toOption) },
+  ]
 }

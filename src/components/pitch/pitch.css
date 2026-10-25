@@ -119,3 +119,34 @@
   text-transform: uppercase;
   letter-spacing: 0.01em;
 }
+
+/* Player currently on the ball in a drill */
+.marker--active .marker__disc {
+  fill: var(--color-ink);
+  stroke: var(--color-line);
+  stroke-width: 1.2;
+}
+.marker--active .marker__code {
+  fill: var(--color-bg);
+}
+
+/* Ball ---------------------------------------------------------------- */
+
+.ball {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.ball__body {
+  fill: var(--color-line);
+  stroke: var(--color-ink);
+  stroke-width: 0.45;
+  filter: drop-shadow(0 0.5px 0.5px oklch(0% 0 0 / 0.4));
+}
+
+.ball__panel {
+  fill: var(--color-ink);
+}

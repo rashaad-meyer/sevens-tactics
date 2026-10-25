@@ -51,7 +51,12 @@ export interface TeamSheet {
   readonly lineup: Lineup
 }
 
-export type MarkerVariant = 'girl' | 'boy' | 'gk' | 'neutral'
+export interface PitchPoint {
+  readonly x: number
+  readonly y: number
+}
+
+export type MarkerVariant = 'girl' | 'boy' | 'gk' | 'neutral' | 'active'
 
 export interface Placement {
   readonly slotId: SlotId

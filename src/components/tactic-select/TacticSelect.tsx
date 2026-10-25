@@ -1,4 +1,4 @@
-import { getTacticOptions, type TacticId } from '../../data/tactics'
+import { getTacticOptionGroups, type TacticId } from '../../data/tactics'
 import { HeaderSelect } from '../ui/HeaderSelect'
 
 interface TacticSelectProps {
@@ -6,8 +6,8 @@ interface TacticSelectProps {
   onChange: (id: TacticId) => void
 }
 
-const OPTIONS = getTacticOptions()
+const GROUPS = getTacticOptionGroups()
 
 export function TacticSelect({ value, onChange }: TacticSelectProps) {
-  return <HeaderSelect id="tactic" label="Tactic" value={value} options={OPTIONS} onChange={onChange} />
+  return <HeaderSelect id="tactic" label="Tactic" value={value} groups={GROUPS} onChange={onChange} />
 }
