@@ -55,6 +55,13 @@ describe('team sheet data integrity', () => {
     expect(all).toEqual(SQUAD.map((p) => p.id).sort())
   })
 
+  it('carries the later line-up edits', () => {
+    const g1h2 = TEAM_SHEETS.find((s) => s.key === 'g1h2')!.lineup
+    expect(g1h2).toMatchObject({ ST: 'adam', CM: 'james', RCB: 'tumelo', LCB: 'declan' })
+    const g3h2 = TEAM_SHEETS.find((s) => s.key === 'g3h2')!.lineup
+    expect(g3h2).toMatchObject({ ST: 'rashaad', CM: 'james' })
+  })
+
   it('Jayden keeps goal except in Game 2, when Declan does', () => {
     for (const sheet of TEAM_SHEETS) {
       expect(sheet.lineup.GK).toBe(sheet.game === 2 ? 'declan' : 'jayden')

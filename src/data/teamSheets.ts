@@ -1,6 +1,9 @@
 import type { TeamSheet } from './types'
 
-/** Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets). */
+/**
+ * Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets),
+ * with later edits: G1H2 Adam ST / James CM / Tumelo DEF; G3H2 Rashaad ST / James CM.
+ */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
     key: 'g1h1',
@@ -21,12 +24,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 1,
     half: 2,
     lineup: {
-      ST: 'james',
+      ST: 'adam',
       LM: 'laura',
-      CM: 'tumelo',
+      CM: 'james',
       RM: 'laurie-ann',
       LCB: 'declan',
-      RCB: 'adam',
+      RCB: 'tumelo',
       GK: 'jayden',
     },
   },
@@ -77,9 +80,9 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 3,
     half: 2,
     lineup: {
-      ST: 'james',
+      ST: 'rashaad',
       LM: 'hannah',
-      CM: 'rashaad',
+      CM: 'james',
       RM: 'laura',
       LCB: 'declan',
       RCB: 'tumelo',
