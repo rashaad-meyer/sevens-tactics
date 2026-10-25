@@ -118,6 +118,35 @@ describe('app routing', () => {
     expect(screen.getByRole('button', { name: 'Replay' })).toBeInTheDocument()
   })
 
+  it('toggles a pattern to the right wing via the URL', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/tactics/attacking-1')
+    await screen.findByRole('heading', { name: 'Attacking Pattern 1 Pattern' })
+    const toggle = screen.getByRole('group', { name: 'Play the pattern up the' })
+    expect(within(toggle).getByRole('button', { name: 'Left' })).toHaveAttribute('aria-pressed', 'true')
+
+    await user.click(within(toggle).getByRole('button', { name: 'Right' }))
+    expect(router.state.location.search).toBe('?side=right')
+    await user.click(screen.getByRole('button', { name: 'Pause' }))
+    await user.click(screen.getByRole('button', { name: 'Go to step 2' }))
+    expect(screen.getByRole('img', { name: 'Right defender (on the ball)' })).toBeInTheDocument()
+    expect(screen.getByTestId('ball')).toHaveStyle({ transform: 'translate(79px, 128px)' })
+    await user.click(screen.getByRole('button', { name: 'Go to step 3' }))
+    expect(screen.getByText('The right midfielder drops a little to show for the ball.')).toBeInTheDocument()
+
+    await user.click(within(toggle).getByRole('button', { name: 'Left' }))
+    expect(router.state.location.search).toBe('')
+  })
+
+  it('keeps the side when switching between patterns', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/tactics/attacking-1?side=right')
+    await screen.findByRole('heading', { name: 'Attacking Pattern 1 Pattern' })
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Tactic' }), 'Attacking Pattern 2')
+    expect(router.state.location.pathname).toBe('/tactics/attacking-2')
+    expect(router.state.location.search).toBe('?side=right')
+  })
+
   it('falls back to Attack for an unknown tactic', async () => {
     const router = renderAt('/tactics/park-the-bus')
     expect(await screen.findByRole('heading', { name: 'Attack 2-3-1' })).toBeInTheDocument()

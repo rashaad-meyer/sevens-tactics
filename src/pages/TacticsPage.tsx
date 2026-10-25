@@ -1,8 +1,12 @@
+import { useMemo } from 'react'
 import { Navigate } from 'react-router'
 import { DrillPlayer } from '../components/drill/DrillPlayer'
+import { SideToggle } from '../components/drill/SideToggle'
 import { Pitch } from '../components/pitch/Pitch'
 import { PositionMarker } from '../components/pitch/PositionMarker'
+import type { Drill } from '../data/drills'
 import { FORMATION_231 } from '../data/formation'
+import { drillForSide, type Side } from '../data/mirror'
 import { DEFAULT_TACTIC, type ShapeTactic } from '../data/tactics'
 import { tacticPath, useSelectedTactic } from '../hooks/useSelectedTactic'
 
@@ -33,8 +37,14 @@ function ShapeView({ tactic }: { tactic: ShapeTactic }) {
   )
 }
 
+function DrillView({ drill, side }: { drill: Drill; side: Side }) {
+  const sided = useMemo(() => drillForSide(drill, side), [drill, side])
+  // Keyed by side as well, so flipping restarts the pattern from the set-up.
+  return <DrillPlayer key={`${drill.id}-${side}`} drill={sided} />
+}
+
 export function TacticsPage() {
-  const { tactic, invalid } = useSelectedTactic()
+  const { tactic, side, invalid, selectSide } = useSelectedTactic()
   if (invalid) {
     return <Navigate to={tacticPath(DEFAULT_TACTIC.id)} replace />
   }
@@ -45,13 +55,13 @@ export function TacticsPage() {
         <h1 id="tactics-heading" className="tactics__title display">
           {tactic.name} <span className="tactics__shape">{badge}</span>
         </h1>
-        {tactic.kind === 'shape' && <p className="page-copy">{tactic.description}</p>}
+        {tactic.kind === 'shape' ? (
+          <p className="page-copy">{tactic.description}</p>
+        ) : (
+          <SideToggle side={side} onChange={selectSide} />
+        )}
       </div>
-      {tactic.kind === 'shape' ? (
-        <ShapeView tactic={tactic} />
-      ) : (
-        <DrillPlayer key={tactic.id} drill={tactic} />
-      )}
+      {tactic.kind === 'shape' ? <ShapeView tactic={tactic} /> : <DrillView drill={tactic} side={side} />}
     </section>
   )
 }

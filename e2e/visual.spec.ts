@@ -33,16 +33,20 @@ test.describe('visual regression', () => {
     })
   }
 
-  for (const [drill, step, count] of [['attacking-1', 7, 8], ['attacking-2', 7, 9]] as const) {
-    test(`${drill} at step ${step} at 375px`, async ({ page }) => {
+  for (const [drill, step, count, side] of [
+    ['attacking-1', 7, 8, 'left'],
+    ['attacking-2', 7, 9, 'left'],
+    ['attacking-2', 7, 9, 'right'],
+  ] as const) {
+    test(`${drill} ${side} at step ${step} at 375px`, async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 812 })
-      await page.goto(`/#/tactics/${drill}`)
+      await page.goto(`/#/tactics/${drill}${side === 'right' ? '?side=right' : ''}`)
       await page.evaluate(() => document.fonts.ready)
       // Drills autoplay; jumping to a step pauses, giving a stable frame.
       await page.getByRole('button', { name: `Go to step ${step}` }).click()
       await expect(page.getByText(`Step ${step}/${count}`)).toBeVisible()
       await expect(page.getByTestId('ball')).toBeVisible()
-      await expect(page).toHaveScreenshot(`tactics-${drill}-step${step}-375.png`, { fullPage: true })
+      await expect(page).toHaveScreenshot(`tactics-${drill}-${side}-step${step}-375.png`, { fullPage: true })
     })
   }
 

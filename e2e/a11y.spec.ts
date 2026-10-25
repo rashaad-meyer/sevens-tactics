@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
-const ROUTES = ['/#/sheet/1/1', '/#/sheet/4/2', '/#/summary', '/#/tactics/attack', '/#/tactics/defend-2', '/#/tactics/attacking-1', '/#/tactics/attacking-2']
+const ROUTES = ['/#/sheet/1/1', '/#/sheet/4/2', '/#/summary', '/#/tactics/attack', '/#/tactics/defend-2', '/#/tactics/attacking-1', '/#/tactics/attacking-2', '/#/tactics/attacking-2?side=right']
 
 test.describe('accessibility', () => {
   for (const route of ROUTES) {

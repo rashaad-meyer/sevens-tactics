@@ -97,3 +97,25 @@ test.describe('attacking pattern 2', () => {
     await expect(page.getByTestId('ball')).toHaveAttribute('style', /translate\(50px, 2\.5px\)/)
   })
 })
+
+test.describe('left / right toggle', () => {
+  test('flips the pattern to the other wing and back', async ({ page }) => {
+    await page.goto('/#/tactics/attacking-1')
+    const toggle = page.getByRole('group', { name: 'Play the pattern up the' })
+    await toggle.getByRole('button', { name: 'Right' }).click()
+    await expect(page).toHaveURL(/attacking-1\?side=right$/)
+    await page.getByRole('button', { name: 'Go to step 3' }).click()
+    await expect(page.getByText('The right midfielder drops a little to show for the ball.')).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Right midfield' })).toHaveAttribute('style', /translate\(81px, 86px\)/)
+    await expect(page.getByRole('img', { name: 'Right defender (on the ball)' })).toBeVisible()
+
+    await toggle.getByRole('button', { name: 'Left' }).click()
+    await expect(page).toHaveURL(/attacking-1$/)
+    await expect(toggle.getByRole('button', { name: 'Left' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  test('is not shown for static shapes', async ({ page }) => {
+    await page.goto('/#/tactics/defend-1')
+    await expect(page.getByRole('group', { name: 'Play the pattern up the' })).toHaveCount(0)
+  })
+})
