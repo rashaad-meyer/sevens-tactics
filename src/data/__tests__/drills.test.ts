@@ -87,18 +87,21 @@ describe('attacking pattern 2', () => {
     expect(frames2[0]!.ballHolder).toBe('GK')
   })
 
-  it('passes GK → CM → LM → CM and ends in the goal', () => {
+  it('passes GK → LCB → CM → LM → CM and ends in the goal', () => {
     const holders = frames2.map((f) => f.ballHolder)
     const passes = holders.filter((h, i) => h && h !== holders[i - 1])
-    expect(passes).toEqual(['GK', 'CM', 'LM', 'CM'])
+    expect(passes).toEqual(['GK', 'LCB', 'CM', 'LM', 'CM'])
     const last = frames2.at(-1)!
     expect(last.ballHolder).toBeUndefined()
     expect(last.ball.y).toBeLessThan(4)
   })
 
   it('CM comes close before receiving, then LM runs up the line and gets the through ball', () => {
+    const defenderReceives = frames2.findIndex((f) => f.ballHolder === 'LCB')
     const cmClose = frames2.findIndex((f) => f.positions.CM.y > start.CM.y + 15)
     const cmReceives = frames2.findIndex((f) => f.ballHolder === 'CM')
+    expect(defenderReceives).toBeGreaterThan(0)
+    expect(cmClose).toBeGreaterThan(defenderReceives)
     const lmRuns = frames2.findIndex((f) => f.positions.LM.y < start.LM.y - 15)
     const lmReceives = frames2.findIndex((f) => f.ballHolder === 'LM')
     expect(cmClose).toBeGreaterThan(0)

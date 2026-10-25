@@ -82,15 +82,17 @@ test.describe('attacking pattern 1', () => {
 })
 
 test.describe('attacking pattern 2', () => {
-  test('runs GK to CM, through ball to LM, cross, goal', async ({ page }) => {
+  test('runs GK to defender to CM, through ball to LM, cross, goal', async ({ page }) => {
     await page.goto('/#/tactics/attacking-2')
     await page.getByRole('button', { name: 'Go to step 1' }).click()
-    await expect(page.getByText('Step 1/8')).toBeVisible()
-    await page.getByRole('button', { name: 'Go to step 3' }).click()
+    await expect(page.getByText('Step 1/9')).toBeVisible()
+    await page.getByRole('button', { name: 'Go to step 2' }).click()
+    await expect(page.getByRole('img', { name: 'Left defender (on the ball)' })).toBeVisible()
+    await page.getByRole('button', { name: 'Go to step 4' }).click()
     await expect(page.getByRole('img', { name: 'Centre midfield (on the ball)' })).toBeVisible()
-    await page.getByRole('button', { name: 'Go to step 5' }).click()
+    await page.getByRole('button', { name: 'Go to step 6' }).click()
     await expect(page.getByRole('img', { name: 'Left midfield (on the ball)' })).toBeVisible()
-    await page.getByRole('button', { name: 'Go to step 8' }).click()
+    await page.getByRole('button', { name: 'Go to step 9' }).click()
     await expect(page.getByText('Goal.')).toBeVisible()
     await expect(page.getByTestId('ball')).toHaveAttribute('style', /translate\(50px, 2\.5px\)/)
   })

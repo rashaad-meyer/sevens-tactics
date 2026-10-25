@@ -107,7 +107,7 @@ export const DRILLS: readonly Drill[] = Object.freeze([
     id: 'attacking-2',
     name: 'Attacking Pattern 2',
     description:
-      'Through the middle then wide: GK to the CM, through ball for the wide midfielder, cross into three runners.',
+      'Defender into the CM, through ball for the wide midfielder, cross into three runners.',
     start: BUILD_UP_START,
     steps: [
       {
@@ -116,13 +116,18 @@ export const DRILLS: readonly Drill[] = Object.freeze([
         durationMs: 0,
       },
       {
-        caption: 'The CM comes in close to receive.',
-        move: { CM: { x: 50, y: 102 } },
-        ball: { holder: 'GK' },
+        caption: 'GK plays it out to the defender.',
+        ball: { holder: 'LCB' },
+        durationMs: 600,
+      },
+      {
+        caption: 'The CM comes in close to the defender to receive.',
+        move: { CM: { x: 40, y: 102 } },
+        ball: { holder: 'LCB' },
         durationMs: 700,
       },
       {
-        caption: 'GK plays it into the CM.',
+        caption: 'Defender plays it into the CM.',
         ball: { holder: 'CM' },
         durationMs: 600,
       },
