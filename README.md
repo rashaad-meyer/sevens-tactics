@@ -29,21 +29,24 @@ pnpm typecheck
 
 Playwright browsers are installed once with `pnpm exec playwright install`.
 
-## Deploy to S3
+## Deploy
 
-Live site: http://sevens-tactics.s3-website.af-south-1.amazonaws.com
+Live site: https://d3rxl4s3ikuiak.cloudfront.net
 
-The app uses hash routing (`/#/sheet/1/2`) and relative asset paths, so it works
-from a plain S3 static website bucket with no redirect rules. Deploys are manual:
+Hosting is an S3 bucket (`sevens-tactics`, af-south-1) behind a CloudFront
+distribution (`E11TFA5I1CL7FZ`). The bucket is private; CloudFront reads it
+through an Origin Access Control. HTTP redirects to HTTPS, responses are
+compressed, and any missing path falls back to `index.html` so hash routes
+such as `/#/sheet/4/2` always resolve. Deploys are manual:
 
 ```bash
-pnpm deploy:s3   # builds, then syncs dist/ to s3://sevens-tactics (af-south-1)
+pnpm deploy:s3   # build, upload with cache headers, invalidate CloudFront
 ```
 
-Requires the AWS CLI with credentials for the bucket's account. The bucket has
-static website hosting on with `index.html` as both index and error document,
-and a public-read bucket policy. Deep links such as `/#/sheet/4/2` resolve
-client-side.
+Requires the AWS CLI with credentials for the bucket's account. Hashed files
+under `assets/` are uploaded as immutable for a year; `index.html` and the
+favicon are uploaded with `max-age=0` so a new build is picked up as soon as
+the invalidation completes (usually under a minute).
 
 ## Updating the team sheets
 
