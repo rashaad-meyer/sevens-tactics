@@ -1,0 +1,225 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Mixed 7s Team Sheets</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+  /* Layout: two-column grid of half-game cards, each drawn as a top-down pitch in 2-3-1 shape, with a legend row at the top. */
+  :root {
+    --bg: #f3f5f0;
+    --card: #ffffff;
+    --pitch: #dfe9d8;
+    --pitch-line: #b7c9ab;
+    --fg: #18201a;
+    --muted: #5d6a5f;
+    --rule: #d6dccf;
+    --girl: #c2185b;
+    --girl-bg: #fbe4ee;
+    --boy: #1f4d8f;
+    --boy-bg: #e1eaf7;
+    --gk-bg: #f6efd6;
+    --display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+    --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141a15; --card: #1d251f; --pitch: #233327; --pitch-line: #3c5440;
+      --fg: #eef2ea; --muted: #a2ad9f; --rule: #324036;
+      --girl: #ff86b4; --girl-bg: #4a1f32; --boy: #8fb7f0; --boy-bg: #223650; --gk-bg: #3d3722;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141a15; --card: #1d251f; --pitch: #233327; --pitch-line: #3c5440;
+    --fg: #eef2ea; --muted: #a2ad9f; --rule: #324036;
+    --girl: #ff86b4; --girl-bg: #4a1f32; --boy: #8fb7f0; --boy-bg: #223650; --gk-bg: #3d3722;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.4;
+    padding-block: 28px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 22px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; border-bottom: 2px solid var(--fg); padding-bottom: 10px; }
+  h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 42px); line-height: 1; margin: 0; text-transform: uppercase; letter-spacing: .01em; }
+  header p { margin: 0; color: var(--muted); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--muted); font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 2px solid; }
+  .legend .g i { background: var(--girl-bg); border-color: var(--girl); }
+  .legend .b i { background: var(--boy-bg); border-color: var(--boy); }
+  .legend .k i { background: var(--gk-bg); border-color: var(--muted); border-style: dashed; }
+
+  .games { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 640px) { .games { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; }
+  .card h2 { margin: 0; padding: 10px 14px; font-family: var(--display); font-weight: 600; font-size: 22px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--rule); }
+  .card h2 small { font-family: var(--body); font-size: 12px; font-weight: 500; color: var(--muted); text-transform: none; letter-spacing: .04em; }
+
+  .pitch { background: var(--pitch); padding: 14px 12px; display: grid; gap: 14px; position: relative;
+    background-image: linear-gradient(var(--pitch-line), var(--pitch-line)); background-size: 100% 1px; background-repeat: no-repeat; background-position: center 100%; }
+  .line { display: grid; gap: 8px; justify-content: center; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); max-width: 320px; margin: 0 auto; width: 100%; }
+  .line.wide { max-width: 100%; grid-template-columns: 1fr 1fr 1fr; }
+  .player { background: var(--boy-bg); border: 2px solid var(--boy); color: var(--fg); border-radius: 999px; padding: 6px 8px; text-align: center; font-weight: 600; font-size: 14px; min-width: 0; overflow-wrap: anywhere; display: grid; line-height: 1.15; }
+  .player b { font-weight: 500; font-size: 10px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+  .player.f { background: var(--girl-bg); border-color: var(--girl); }
+  .player.gk { background: var(--gk-bg); border-color: var(--muted); border-style: dashed; color: var(--muted); font-weight: 500; font-style: italic; }
+
+  .bench { padding: 10px 14px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); }
+  .bench strong { color: var(--fg); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .08em; margin-right: 6px; }
+
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .summary section { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+  .summary h3 { margin: 0 0 8px; font-family: var(--display); text-transform: uppercase; font-size: 18px; font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  td { padding: 4px 0; border-bottom: 1px solid var(--rule); }
+  td:last-child { text-align: right; font-weight: 600; }
+  tr:last-child td { border-bottom: 0; }
+  .rules { color: var(--muted); font-size: 13px; }
+  .rules ul { margin: 6px 0 0; padding-left: 18px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Mixed 7s Team Sheets</h1>
+    <p>4 games · 8 halves · 2-3-1 · minimum 3 girls on the pitch</p>
+  </header>
+
+  <div class="legend">
+    <span class="g"><i></i>Girls (wide mid or striker)</span>
+    <span class="b"><i></i>Boys</span>
+    <span class="k"><i></i>Goalkeeper</span>
+  </div>
+
+  <div class="games">
+
+    <article class="card">
+      <h2>Game 1 <small>1st half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Hannah</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Laura</div><div class="player"><b>CM</b>Rashaad</div><div class="player f"><b>RM</b>Maria</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Josh</div><div class="player"><b>DEF</b>Declan</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Cass, Laurie Ann, Adam, Alex, Angelo, Tumelo, James</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 1 <small>2nd half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Cass</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Laura</div><div class="player"><b>CM</b>James</div><div class="player f"><b>RM</b>Laurie Ann</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Adam</div><div class="player"><b>DEF</b>Alex</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Hannah, Maria, Josh, Declan, Rashaad, Angelo, Tumelo</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 2 <small>1st half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Laurie Ann</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Hannah</div><div class="player"><b>CM</b>Angelo</div><div class="player f"><b>RM</b>Maria</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Josh</div><div class="player"><b>DEF</b>Tumelo</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Cass, Laura, Declan, Adam, Alex, Rashaad, James</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 2 <small>2nd half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Laura</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Cass</div><div class="player"><b>CM</b>Rashaad</div><div class="player f"><b>RM</b>Hannah</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Alex</div><div class="player"><b>DEF</b>Declan</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Maria, Laurie Ann, Josh, Adam, Angelo, Tumelo, James</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 3 <small>1st half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Maria</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Cass</div><div class="player"><b>CM</b>Tumelo</div><div class="player f"><b>RM</b>Laurie Ann</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Adam</div><div class="player"><b>DEF</b>Alex</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Hannah, Laura, Josh, Declan, Rashaad, Angelo, James</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 3 <small>2nd half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Hannah</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Laura</div><div class="player"><b>CM</b>Rashaad</div><div class="player f"><b>RM</b>Laurie Ann</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Josh</div><div class="player"><b>DEF</b>James</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Cass, Maria, Declan, Adam, Alex, Angelo, Tumelo</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 4 <small>1st half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Cass</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Laura</div><div class="player"><b>CM</b>Tumelo</div><div class="player f"><b>RM</b>Maria</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Angelo</div><div class="player"><b>DEF</b>James</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Jayden</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Hannah, Laurie Ann, Josh, Declan, Adam, Alex, Rashaad</div>
+    </article>
+
+    <article class="card">
+      <h2>Game 4 <small>2nd half</small></h2>
+      <div class="pitch">
+        <div class="line"><div class="player f"><b>ST</b>Laurie Ann</div></div>
+        <div class="line wide"><div class="player f"><b>LM</b>Cass</div><div class="player"><b>CM</b>Angelo</div><div class="player f"><b>RM</b>Hannah</div></div>
+        <div class="line"><div class="player"><b>DEF</b>Jayden</div><div class="player"><b>DEF</b>Adam</div></div>
+        <div class="line"><div class="player gk"><b>GK</b>Declan</div></div>
+      </div>
+      <div class="bench"><strong>Off</strong>Laura, Maria, Josh, Alex, Rashaad, Tumelo, James</div>
+    </article>
+
+  </div>
+
+  <div class="summary">
+    <section>
+      <h3>Halves played – girls</h3>
+      <table>
+        <tr><td>Cass</td><td>5</td></tr>
+        <tr><td>Hannah</td><td>5</td></tr>
+        <tr><td>Laura</td><td>5</td></tr>
+        <tr><td>Laurie Ann</td><td>5</td></tr>
+        <tr><td>Maria</td><td>4</td></tr>
+      </table>
+    </section>
+    <section>
+      <h3>Halves played – boys (outfield)</h3>
+      <table>
+        <tr><td>Josh</td><td>3</td></tr>
+        <tr><td>Adam</td><td>3</td></tr>
+        <tr><td>Alex</td><td>3</td></tr>
+        <tr><td>Angelo</td><td>3</td></tr>
+        <tr><td>Tumelo</td><td>3</td></tr>
+        <tr><td>Rashaad</td><td>3</td></tr>
+        <tr><td>James</td><td>3</td></tr>
+        <tr><td>Declan</td><td>2 (+1 in goal)</td></tr>
+        <tr><td>Jayden</td><td>1 (+7 in goal)</td></tr>
+      </table>
+    </section>
+    <section class="rules">
+      <h3>Selection rules</h3>
+      <ul>
+        <li>Girls play wide midfield or striker only.</li>
+        <li>Josh, Jayden and Declan play at defender.</li>
+        <li>Rashaad, James, Angelo and Tumelo rotate central midfield.</li>
+        <li>Jayden keeps goal in every half except Game 4 2nd half, when Declan takes over and Jayden plays at defender.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+</body></html>

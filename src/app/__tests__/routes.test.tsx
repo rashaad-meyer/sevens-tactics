@@ -36,8 +36,8 @@ describe('app routing', () => {
     const user = userEvent.setup()
     const router = renderAt('/sheet/1/1')
     await screen.findByRole('heading', { name: 'Game 1, half 1 team sheet' })
-    await user.selectOptions(select(), 'Game 4 | Half 2')
-    expect(router.state.location.pathname).toBe('/sheet/4/2')
+    await user.selectOptions(select(), 'Game 2 | Half 1')
+    expect(router.state.location.pathname).toBe('/sheet/2/1')
     expect(await screen.findByRole('img', { name: 'Goalkeeper: Declan' })).toBeInTheDocument()
   })
 
@@ -61,8 +61,8 @@ describe('app routing', () => {
     renderAt('/summary')
     expect(await screen.findByRole('heading', { name: 'Summary' })).toBeInTheDocument()
     const jayden = screen.getByText('Jayden').closest('tr')!
-    expect(jayden.textContent).toContain('1 (+7 in goal)')
-    expect(screen.getByText(/Girls play wide midfield/)).toBeInTheDocument()
+    expect(jayden.textContent).toContain('1 (+6 in goal)')
+    expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
   })
 
   it('renders the tactics placeholder with nameless markers', async () => {

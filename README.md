@@ -57,8 +57,9 @@ All data lives in `src/data/`:
 - `formation.ts` holds the 2-3-1 slot coordinates in pitch units (100 wide by
   150 tall). The future tactics pages will animate the same slots.
 
-`pnpm test` checks every sheet has seven unique players, at least three girls,
-and that pitch plus bench equals the full squad.
+`pnpm test` checks every sheet has seven unique players,
+at least two girls (only ever at striker or wide midfield), and that pitch plus
+bench equals the full squad.
 
 ## Structure
 

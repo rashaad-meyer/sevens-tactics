@@ -52,7 +52,7 @@ describe('parseSheetParams', () => {
 
 describe('getSheet and getAdjacentSheet', () => {
   it('finds a sheet by key', () => {
-    expect(getSheet(sheetKey(2, 2))?.lineup.ST).toBe('laura')
+    expect(getSheet(sheetKey(2, 2))?.lineup.ST).toBe('rashaad')
   })
 
   it('steps forward and backward through the sheets', () => {

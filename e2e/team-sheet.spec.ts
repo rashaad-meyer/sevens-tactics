@@ -6,15 +6,15 @@ test.describe('team sheet viewer', () => {
     await expect(page).toHaveURL(/#\/sheet\/1\/1$/)
     await expect(page.getByRole('heading', { name: 'Game 1, half 1 team sheet' })).toBeAttached()
     await expect(page.locator('.formation .marker')).toHaveCount(7)
-    await expect(page.getByRole('img', { name: 'Striker: Hannah' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Striker: Adam' })).toBeVisible()
   })
 
   test('selecting a game and half updates the URL and the sheet', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('combobox', { name: 'Team sheet' }).selectOption('Game 4 | Half 2')
-    await expect(page).toHaveURL(/#\/sheet\/4\/2$/)
+    await page.getByRole('combobox', { name: 'Team sheet' }).selectOption('Game 2 | Half 1')
+    await expect(page).toHaveURL(/#\/sheet\/2\/1$/)
     await expect(page.getByRole('img', { name: 'Goalkeeper: Declan' })).toBeVisible()
-    await expect(page.getByRole('img', { name: 'Striker: Laurie Ann' })).toContainText('LA')
+    await expect(page.getByRole('img', { name: 'Right defender: Jayden' })).toBeVisible()
   })
 
   test('back button returns to the previous sheet', async ({ page }) => {
@@ -23,12 +23,13 @@ test.describe('team sheet viewer', () => {
     await expect(page).toHaveURL(/#\/sheet\/2\/1$/)
     await page.goBack()
     await expect(page).toHaveURL(/#\/sheet\/1\/1$/)
-    await expect(page.getByRole('img', { name: 'Striker: Hannah' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Striker: Adam' })).toBeVisible()
   })
 
   test('deep links and prev/next work', async ({ page }) => {
     await page.goto('/#/sheet/3/1')
-    await expect(page.getByRole('img', { name: 'Striker: Maria' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Striker: Cass' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Left midfield: Laurie Ann' })).toContainText('LA')
     await page.getByRole('link', { name: 'Next: Game 3 | Half 2' }).click()
     await expect(page).toHaveURL(/#\/sheet\/3\/2$/)
     await page.getByRole('link', { name: 'Previous: Game 3 | Half 1' }).click()

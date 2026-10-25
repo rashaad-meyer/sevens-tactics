@@ -11,13 +11,13 @@ describe('Bench', () => {
     expect(details).not.toHaveAttribute('open')
     expect(screen.getByText('7 players')).toBeInTheDocument()
     const names = screen.getAllByRole('listitem').map((li) => li.textContent)
-    expect(names).toEqual(['Cass', 'Laurie Ann', 'Adam', 'Alex', 'Angelo', 'Tumelo', 'James'])
+    expect(names).toEqual(['Laura', 'Laurie Ann', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'])
   })
 
   it('colour-codes chips by gender', () => {
     render(<Bench players={getBench(getSheet('g1h1')!)} />)
-    expect(screen.getByText('Cass')).toHaveClass('bench__chip--f')
-    expect(screen.getByText('Adam')).toHaveClass('bench__chip--m')
+    expect(screen.getByText('Laura')).toHaveClass('bench__chip--f')
+    expect(screen.getByText('Declan')).toHaveClass('bench__chip--m')
   })
 })
 

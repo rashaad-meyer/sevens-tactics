@@ -2,20 +2,22 @@ import { describe, expect, it } from 'vitest'
 import { FORMATION_231 } from '../formation'
 import { getPlayer, SQUAD } from '../players'
 import { countGirlsOnPitch, getBench, getHalvesPlayed, getLineupPlacements } from '../selectors'
-import { TEAM_SHEETS } from '../teamSheets'
-import type { SheetKey } from '../types'
+import { MIN_GIRLS_ON_PITCH, TEAM_SHEETS } from '../teamSheets'
+import type { SheetKey, SlotId } from '../types'
 
-/** Bench lists copied verbatim from the reference HTML, in order. */
+/** Bench lists copied verbatim from the corrected reference HTML. */
 const EXPECTED_BENCH: Record<SheetKey, string[]> = {
-  g1h1: ['Cass', 'Laurie Ann', 'Adam', 'Alex', 'Angelo', 'Tumelo', 'James'],
-  g1h2: ['Hannah', 'Maria', 'Josh', 'Declan', 'Rashaad', 'Angelo', 'Tumelo'],
-  g2h1: ['Cass', 'Laura', 'Declan', 'Adam', 'Alex', 'Rashaad', 'James'],
-  g2h2: ['Maria', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Tumelo', 'James'],
-  g3h1: ['Hannah', 'Laura', 'Josh', 'Declan', 'Rashaad', 'Angelo', 'James'],
-  g3h2: ['Cass', 'Maria', 'Declan', 'Adam', 'Alex', 'Angelo', 'Tumelo'],
-  g4h1: ['Hannah', 'Laurie Ann', 'Josh', 'Declan', 'Adam', 'Alex', 'Rashaad'],
-  g4h2: ['Laura', 'Maria', 'Josh', 'Alex', 'Rashaad', 'Tumelo', 'James'],
+  g1h1: ['Laura', 'Laurie Ann', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'],
+  g1h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Angelo', 'Rashaad', 'Alex'],
+  g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Alex', 'Tumelo', 'Rashaad', 'James'],
+  g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Jayden', 'Angelo', 'Alex'],
+  g3h1: ['Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo', 'Rashaad', 'James'],
+  g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Angelo', 'Adam'],
+  g4h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Adam', 'Angelo', 'Tumelo'],
+  g4h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad', 'James'],
 }
+
+const GIRL_SLOTS: readonly SlotId[] = ['ST', 'LM', 'RM']
 
 describe('team sheet data integrity', () => {
   it('has eight sheets in game/half order', () => {
@@ -31,15 +33,15 @@ describe('team sheet data integrity', () => {
     for (const id of ids) expect(() => getPlayer(id)).not.toThrow()
   })
 
-  it.each(TEAM_SHEETS)('$key has at least three girls, all in ST/LM/RM', (sheet) => {
-    expect(countGirlsOnPitch(sheet)).toBeGreaterThanOrEqual(3)
-    for (const slot of ['ST', 'LM', 'RM'] as const) {
-      expect(getPlayer(sheet.lineup[slot]).gender).toBe('f')
+  it.each(TEAM_SHEETS)('$key has at least two girls, only at ST/LM/RM', (sheet) => {
+    expect(countGirlsOnPitch(sheet)).toBeGreaterThanOrEqual(MIN_GIRLS_ON_PITCH)
+    for (const [slot, id] of Object.entries(sheet.lineup) as [SlotId, typeof sheet.lineup.ST][]) {
+      if (getPlayer(id).gender === 'f') expect(GIRL_SLOTS).toContain(slot)
     }
   })
 
   it.each(TEAM_SHEETS)('$key bench matches the reference sheet', (sheet) => {
-    // The reference lists g2h2 as "Maria, Laurie Ann"; we always use squad order.
+    // The reference lists benches in varying order; we always use squad order.
     const names = getBench(sheet).map((p) => p.name)
     expect([...names].sort()).toEqual([...EXPECTED_BENCH[sheet.key]].sort())
   })
@@ -52,6 +54,12 @@ describe('team sheet data integrity', () => {
     const all = [...Object.values(sheet.lineup), ...getBench(sheet).map((p) => p.id)].sort()
     expect(all).toEqual(SQUAD.map((p) => p.id).sort())
   })
+
+  it('Jayden keeps goal except in Game 2, when Declan does', () => {
+    for (const sheet of TEAM_SHEETS) {
+      expect(sheet.lineup.GK).toBe(sheet.game === 2 ? 'declan' : 'jayden')
+    }
+  })
 })
 
 describe('getLineupPlacements', () => {
@@ -59,17 +67,18 @@ describe('getLineupPlacements', () => {
     const placements = getLineupPlacements(TEAM_SHEETS[0]!)
     expect(placements.map((p) => p.slotId)).toEqual(FORMATION_231.map((s) => s.slotId))
     expect(placements[0]).toMatchObject({ slotId: 'ST', x: 50, y: 30 })
-    expect(placements[0]!.player.name).toBe('Hannah')
+    expect(placements[0]!.player.name).toBe('Adam')
   })
 
   it('assigns the gk variant by slot, not by player', () => {
-    const g4h2 = TEAM_SHEETS.find((s) => s.key === 'g4h2')!
+    const g2h1 = TEAM_SHEETS.find((s) => s.key === 'g2h1')!
     const byName = Object.fromEntries(
-      getLineupPlacements(g4h2).map((p) => [p.player.name, p.variant]),
+      getLineupPlacements(g2h1).map((p) => [p.player.name, p.variant]),
     )
     expect(byName['Declan']).toBe('gk')
     expect(byName['Jayden']).toBe('boy')
-    expect(byName['Cass']).toBe('girl')
+    expect(byName['Maria']).toBe('girl')
+    expect(byName['Adam']).toBe('boy')
   })
 })
 
@@ -79,20 +88,20 @@ describe('getHalvesPlayed', () => {
       getHalvesPlayed().map((h) => [h.player.name, [h.outfield, h.inGoal]]),
     )
     expect(table).toEqual({
-      Cass: [5, 0],
-      Hannah: [5, 0],
-      Laura: [5, 0],
-      'Laurie Ann': [5, 0],
-      Maria: [4, 0],
-      Josh: [3, 0],
-      Adam: [3, 0],
+      Cass: [4, 0],
+      Hannah: [4, 0],
+      Laura: [4, 0],
+      'Laurie Ann': [3, 0],
+      Maria: [3, 0],
+      Josh: [4, 0],
+      Rashaad: [4, 0],
+      James: [4, 0],
+      Adam: [4, 0],
+      Tumelo: [4, 0],
       Alex: [3, 0],
       Angelo: [3, 0],
-      Tumelo: [3, 0],
-      Rashaad: [3, 0],
-      James: [3, 0],
-      Declan: [2, 1],
-      Jayden: [1, 7],
+      Declan: [3, 2],
+      Jayden: [1, 6],
     })
   })
 })

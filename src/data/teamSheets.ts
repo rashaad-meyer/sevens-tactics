@@ -1,18 +1,18 @@
 import type { TeamSheet } from './types'
 
-/** Transcribed from docs/reference/mixed-7s-team-sheets.html. */
+/** Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets). */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
     key: 'g1h1',
     game: 1,
     half: 1,
     lineup: {
-      ST: 'hannah',
-      LM: 'laura',
+      ST: 'adam',
+      LM: 'cass',
       CM: 'rashaad',
-      RM: 'maria',
+      RM: 'hannah',
       LCB: 'josh',
-      RCB: 'declan',
+      RCB: 'angelo',
       GK: 'jayden',
     },
   },
@@ -21,12 +21,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 1,
     half: 2,
     lineup: {
-      ST: 'cass',
+      ST: 'james',
       LM: 'laura',
-      CM: 'james',
+      CM: 'tumelo',
       RM: 'laurie-ann',
-      LCB: 'adam',
-      RCB: 'alex',
+      LCB: 'declan',
+      RCB: 'adam',
       GK: 'jayden',
     },
   },
@@ -35,13 +35,13 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 2,
     half: 1,
     lineup: {
-      ST: 'laurie-ann',
-      LM: 'hannah',
+      ST: 'adam',
+      LM: 'maria',
       CM: 'angelo',
-      RM: 'maria',
+      RM: 'cass',
       LCB: 'josh',
-      RCB: 'tumelo',
-      GK: 'jayden',
+      RCB: 'jayden',
+      GK: 'declan',
     },
   },
   {
@@ -49,13 +49,13 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 2,
     half: 2,
     lineup: {
-      ST: 'laura',
-      LM: 'cass',
-      CM: 'rashaad',
-      RM: 'hannah',
-      LCB: 'alex',
-      RCB: 'declan',
-      GK: 'jayden',
+      ST: 'rashaad',
+      LM: 'hannah',
+      CM: 'james',
+      RM: 'laura',
+      LCB: 'tumelo',
+      RCB: 'adam',
+      GK: 'declan',
     },
   },
   {
@@ -63,11 +63,11 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 3,
     half: 1,
     lineup: {
-      ST: 'maria',
-      LM: 'cass',
-      CM: 'tumelo',
-      RM: 'laurie-ann',
-      LCB: 'adam',
+      ST: 'cass',
+      LM: 'laurie-ann',
+      CM: 'angelo',
+      RM: 'maria',
+      LCB: 'josh',
       RCB: 'alex',
       GK: 'jayden',
     },
@@ -77,12 +77,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 3,
     half: 2,
     lineup: {
-      ST: 'hannah',
-      LM: 'laura',
+      ST: 'james',
+      LM: 'hannah',
       CM: 'rashaad',
-      RM: 'laurie-ann',
-      LCB: 'josh',
-      RCB: 'james',
+      RM: 'laura',
+      LCB: 'declan',
+      RCB: 'tumelo',
       GK: 'jayden',
     },
   },
@@ -91,12 +91,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 4,
     half: 1,
     lineup: {
-      ST: 'cass',
-      LM: 'laura',
-      CM: 'tumelo',
-      RM: 'maria',
-      LCB: 'angelo',
-      RCB: 'james',
+      ST: 'rashaad',
+      LM: 'laurie-ann',
+      CM: 'james',
+      RM: 'cass',
+      LCB: 'josh',
+      RCB: 'alex',
       GK: 'jayden',
     },
   },
@@ -105,13 +105,13 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 4,
     half: 2,
     lineup: {
-      ST: 'laurie-ann',
-      LM: 'cass',
-      CM: 'angelo',
+      ST: 'laura',
+      LM: 'maria',
+      CM: 'tumelo',
       RM: 'hannah',
-      LCB: 'jayden',
-      RCB: 'adam',
-      GK: 'declan',
+      LCB: 'declan',
+      RCB: 'alex',
+      GK: 'jayden',
     },
   },
 ] as const satisfies readonly TeamSheet[])
@@ -123,9 +123,12 @@ if (!firstSheet) {
 /** Fallback sheet for the root route and for invalid URLs. */
 export const DEFAULT_SHEET: TeamSheet = firstSheet
 
+/** Minimum number of girls on the pitch in every half. */
+export const MIN_GIRLS_ON_PITCH = 2
+
+/** Only statements that hold for every sheet above. */
 export const SELECTION_RULES: readonly string[] = Object.freeze([
+  'Minimum 2 girls on the pitch in every half.',
   'Girls play wide midfield or striker only.',
-  'Josh, Jayden and Declan play at defender.',
-  'Rashaad, James, Angelo and Tumelo rotate central midfield.',
-  'Jayden keeps goal in every half except Game 4 2nd half, when Declan takes over and Jayden plays at defender.',
+  'Jayden keeps goal in every half except Game 2, when Declan takes over.',
 ])

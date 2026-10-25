@@ -20,12 +20,12 @@ test.describe('accessibility', () => {
     const snapshot = await page.locator('.team-sheet__pitch').ariaSnapshot()
     expect(snapshot).toContain('group "Game 1, half 1 line-up, attacking towards the top"')
     for (const label of [
-      'Striker: Hannah',
-      'Left midfield: Laura',
+      'Striker: Adam',
+      'Left midfield: Cass',
       'Centre midfield: Rashaad',
-      'Right midfield: Maria',
+      'Right midfield: Hannah',
       'Left defender: Josh',
-      'Right defender: Declan',
+      'Right defender: Angelo',
       'Goalkeeper: Jayden',
     ]) {
       expect(snapshot).toContain(`img "${label}"`)
