@@ -142,9 +142,9 @@ export const DRILLS: readonly Drill[] = Object.freeze([
         caption: 'Left midfielder takes it up the side. ST, CM and RM run into the box.',
         move: {
           LM: { x: 10, y: 12 },
-          ST: { x: 40, y: 11 },
-          CM: { x: 50, y: 15 },
-          RM: { x: 61, y: 11 },
+          ST: { x: 35, y: 10 },
+          CM: { x: 50, y: 18 },
+          RM: { x: 65, y: 10 },
         },
         ball: { holder: 'LM' },
         durationMs: 900,
@@ -156,7 +156,7 @@ export const DRILLS: readonly Drill[] = Object.freeze([
       },
       {
         caption: 'Goal.',
-        move: { CM: { x: 50, y: 12 } },
+        move: { CM: { x: 50, y: 14 } },
         ball: { point: { x: 50, y: 2.5 } },
         durationMs: 400,
       },
