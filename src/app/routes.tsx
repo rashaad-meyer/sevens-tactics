@@ -2,7 +2,9 @@
 import { lazy, Suspense } from 'react'
 import { createHashRouter, Navigate, type RouteObject } from 'react-router'
 import { DEFAULT_SHEET_KEY } from '../data/selectors'
+import { DEFAULT_TACTIC } from '../data/tactics'
 import { SHEET_ROUTE, sheetPathForKey } from '../hooks/useSelectedSheet'
+import { TACTICS_ROUTE, tacticPath } from '../hooks/useSelectedTactic'
 import { ErrorPage } from '../pages/ErrorPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { SummaryPage } from '../pages/SummaryPage'
@@ -23,8 +25,9 @@ export const routes: RouteObject[] = [
       { index: true, element: <Navigate to={sheetPathForKey(DEFAULT_SHEET_KEY)} replace /> },
       { path: SHEET_ROUTE, element: <TeamSheetPage /> },
       { path: '/summary', element: <SummaryPage /> },
+      { path: '/tactics', element: <Navigate to={tacticPath(DEFAULT_TACTIC.id)} replace /> },
       {
-        path: '/tactics',
+        path: TACTICS_ROUTE,
         element: (
           <Suspense fallback={<p className="page-loading">Loading…</p>}>
             <TacticsPage />

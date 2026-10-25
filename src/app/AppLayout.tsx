@@ -1,18 +1,20 @@
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet, useLocation } from 'react-router'
 import { GameHalfSelect } from '../components/game-half-select/GameHalfSelect'
+import { TacticSelect } from '../components/tactic-select/TacticSelect'
 import { useSelectedSheet } from '../hooks/useSelectedSheet'
+import { useSelectedTactic } from '../hooks/useSelectedTactic'
 import './app.css'
 
 const NAV_LINKS = [
-  { to: '/sheet/1/1', label: 'Sheets', matchPrefix: '/sheet' },
-  { to: '/summary', label: 'Summary', matchPrefix: '/summary' },
-  { to: '/tactics', label: 'Tactics', matchPrefix: '/tactics' },
+  { to: '/sheet/1/1', label: 'Sheets', prefix: '/sheet' },
+  { to: '/summary', label: 'Summary', prefix: '/summary' },
+  { to: '/tactics', label: 'Tactics', prefix: '/tactics' },
 ] as const
 
 export function AppLayout() {
-  const { sheet, selectSheet, onSheetRoute } = useSelectedSheet()
-  const isLinkActive = (isActive: boolean, prefix: string) =>
-    isActive || (prefix === '/sheet' && onSheetRoute)
+  const { pathname } = useLocation()
+  const sheets = useSelectedSheet()
+  const tactics = useSelectedTactic()
   return (
     <div className="app">
       <header className="app-header">
@@ -26,16 +28,18 @@ export function AppLayout() {
               <NavLink
                 key={link.to}
                 to={link.to}
-                className={({ isActive }) =>
-                  `app-nav__link${isLinkActive(isActive, link.matchPrefix) ? ' is-active' : ''}`
-                }
+                className={`app-nav__link${pathname.startsWith(link.prefix) ? ' is-active' : ''}`}
               >
                 {link.label}
               </NavLink>
             ))}
           </nav>
         </div>
-        <GameHalfSelect value={sheet.key} onChange={selectSheet} />
+        {tactics.onTacticsRoute ? (
+          <TacticSelect value={tactics.tactic.id} onChange={tactics.selectTactic} />
+        ) : (
+          <GameHalfSelect value={sheets.sheet.key} onChange={sheets.selectSheet} />
+        )}
       </header>
       <main className="app-main">
         <Outlet />

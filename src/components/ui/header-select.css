@@ -1,9 +1,9 @@
-.game-half-select {
+.header-select {
   display: grid;
   gap: var(--space-1);
 }
 
-.game-half-select__label {
+.header-select__label {
   font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -11,11 +11,11 @@
   color: var(--color-ink-muted);
 }
 
-.game-half-select__control {
+.header-select__control {
   position: relative;
 }
 
-.game-half-select__select {
+.header-select__select {
   appearance: none;
   -webkit-appearance: none;
   width: 100%;
@@ -31,11 +31,11 @@
   transition: transform var(--duration-fast) var(--ease-out-expo);
 }
 
-.game-half-select__select:active {
+.header-select__select:active {
   transform: scale(0.995);
 }
 
-.game-half-select__chevron {
+.header-select__chevron {
   position: absolute;
   right: 1.1rem;
   top: 50%;

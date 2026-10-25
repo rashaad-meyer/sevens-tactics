@@ -65,11 +65,37 @@ describe('app routing', () => {
     expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
   })
 
-  it('renders the tactics placeholder with nameless markers', async () => {
-    renderAt('/tactics')
-    expect(await screen.findByRole('heading', { name: 'Tactics' })).toBeInTheDocument()
+  it('redirects /tactics to the Attack shape and swaps the header select', async () => {
+    const router = renderAt('/tactics')
+    expect(await screen.findByRole('heading', { name: 'Attack 2-3-1' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/tactics/attack')
+    const tacticSelect = screen.getByRole('combobox', { name: 'Tactic' })
+    expect(tacticSelect).toHaveValue('attack')
+    expect(screen.queryByRole('combobox', { name: 'Team sheet' })).toBeNull()
     const gk = await screen.findByRole('img', { name: 'Goalkeeper' })
     expect(gk).toHaveClass('marker--neutral')
+  })
+
+  it('moves the markers when a defensive tactic is chosen', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/tactics/attack')
+    const lm = await screen.findByRole('img', { name: 'Left midfield' })
+    expect(lm).toHaveStyle({ transform: 'translate(20px, 64px)' })
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Tactic' }), 'Defend 1 · 4-2-0')
+    expect(router.state.location.pathname).toBe('/tactics/defend-1')
+    expect(await screen.findByRole('heading', { name: 'Defend 1 4-2-0' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Left midfield' })).toHaveStyle({
+      transform: 'translate(15px, 104px)',
+    })
+    expect(screen.getByRole('img', { name: 'Striker' })).toHaveStyle({
+      transform: 'translate(36px, 76px)',
+    })
+  })
+
+  it('falls back to Attack for an unknown tactic', async () => {
+    const router = renderAt('/tactics/park-the-bus')
+    expect(await screen.findByRole('heading', { name: 'Attack 2-3-1' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/tactics/attack')
   })
 
   it('shows not found for unknown routes', async () => {

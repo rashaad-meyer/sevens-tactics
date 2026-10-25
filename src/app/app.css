@@ -151,11 +151,39 @@
   }
 }
 
-/* Tactics placeholder ------------------------------------------------- */
+/* Tactics ------------------------------------------------------------ */
 
 .tactics {
   display: grid;
   gap: var(--space-3);
+}
+
+.tactics__intro {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.tactics__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.tactics__shape {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-bg);
+  background: var(--color-ink);
+  border-radius: var(--radius-pill);
+  padding: 0.15rem 0.6rem 0.1rem;
+}
+
+/* Slots keep their identity between tactics, so a transform change slides them. */
+.tactics .marker {
+  transition: transform var(--duration-slow) var(--ease-out-expo);
 }
 
 .tactics__pitch {
@@ -164,6 +192,6 @@
 }
 
 .tactics__pitch .pitch {
-  max-height: calc(100svh - 16rem);
+  max-height: calc(100svh - 15rem);
   margin-inline: auto;
 }

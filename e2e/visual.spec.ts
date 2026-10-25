@@ -23,6 +23,16 @@ test.describe('visual regression', () => {
     }
   }
 
+  for (const tactic of ['attack', 'defend-1', 'defend-2']) {
+    test(`tactics ${tactic} at 375px`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.goto(`/#/tactics/${tactic}`)
+      await page.evaluate(() => document.fonts.ready)
+      await expect(page.locator('.tactics .marker')).toHaveCount(7)
+      await expect(page).toHaveScreenshot(`tactics-${tactic}-375.png`, { fullPage: true })
+    })
+  }
+
   test('summary page at 375px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 })
     await page.goto('/#/summary')

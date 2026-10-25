@@ -1,13 +1,13 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
-const ROUTES = ['/#/sheet/1/1', '/#/sheet/4/2', '/#/summary', '/#/tactics']
+const ROUTES = ['/#/sheet/1/1', '/#/sheet/4/2', '/#/summary', '/#/tactics/attack', '/#/tactics/defend-2']
 
 test.describe('accessibility', () => {
   for (const route of ROUTES) {
     test(`${route} has no axe violations`, async ({ page }) => {
       await page.goto(route)
-      await expect(page.getByRole('combobox', { name: 'Team sheet' })).toBeVisible()
+      await expect(page.getByRole('combobox')).toBeVisible()
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
         .analyze()
