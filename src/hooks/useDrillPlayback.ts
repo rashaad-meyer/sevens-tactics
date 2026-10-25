@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import type { DrillFrame } from '../data/drills'
 
 /** Pause on each frame after the movement finishes, so a step can be read. */
-export const HOLD_MS = 700
+export const HOLD_MS = 150
 /** Longer pause on the final frame before looping back to the start. */
-export const END_HOLD_MS = 1800
+export const END_HOLD_MS = 900
 
 export interface DrillPlaybackOptions {
   /** Start playing as soon as the drill mounts. */

@@ -39,7 +39,7 @@ test.describe('visual regression', () => {
     await page.evaluate(() => document.fonts.ready)
     // Drills autoplay; jump to step 1 (which pauses) for a stable frame.
     await page.getByRole('button', { name: 'Go to step 1' }).click()
-    await expect(page.getByText('Step 1/9')).toBeVisible()
+    await expect(page.getByText('Step 1/8')).toBeVisible()
     await expect(page.getByTestId('ball')).toBeVisible()
     await expect(page).toHaveScreenshot('tactics-attacking-1-375.png', { fullPage: true })
   })

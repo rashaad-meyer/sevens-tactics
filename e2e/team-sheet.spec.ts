@@ -51,18 +51,17 @@ test.describe('team sheet viewer', () => {
   })
 
   test('keyboard: the select is reachable by Tab and operable', async ({ page, browserName }) => {
+    // WebKit leaves links out of the Tab order by default, so the tab count differs there.
+    test.skip(browserName === 'webkit', 'Safari does not tab to links without a setting change')
     await page.goto('/')
     const select = page.getByRole('combobox', { name: 'Team sheet' })
     // Tab through the three nav links to the select.
     for (let i = 0; i < 4; i += 1) await page.keyboard.press('Tab')
     await expect(select).toBeFocused()
 
-    // macOS and WebKit open a native picker on ArrowDown instead of changing the value,
+    // macOS opens a native picker on ArrowDown instead of changing the value,
     // so the keyboard value change is only asserted where it is deterministic.
-    test.skip(
-      process.platform === 'darwin' || browserName === 'webkit',
-      'Native picker intercepts arrow keys on this platform',
-    )
+    test.skip(process.platform === 'darwin', 'Native picker intercepts arrow keys on macOS')
     await page.keyboard.press('ArrowDown')
     await expect(page).toHaveURL(/#\/sheet\/1\/2$/)
   })

@@ -192,6 +192,6 @@
 }
 
 .tactics__pitch .pitch {
-  max-height: calc(100svh - 15rem);
+  max-height: calc(100svh - 17rem);
   margin-inline: auto;
 }

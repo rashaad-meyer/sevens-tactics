@@ -28,18 +28,19 @@ describe('attacking pattern 1', () => {
     expect(last.ball.x).toBeLessThan(57)
   })
 
-  it('moves players in the described order: LM drops, CM drifts wide, ST drifts wide then runs through', () => {
+  it('moves players in the described order: LM drops, CM drifts wide, ST runs through from his spot', () => {
     const start = frames[0]!.positions
     const lmDrop = frames.findIndex((f) => f.positions.LM.y > start.LM.y)
     const cmWide = frames.findIndex((f) => f.positions.CM.x < start.CM.x)
-    const stWide = frames.findIndex((f) => f.positions.ST.x < start.ST.x)
     const stThrough = frames.findIndex((f) => f.positions.ST.y < 20)
     expect(lmDrop).toBeGreaterThan(0)
     expect(cmWide).toBeGreaterThan(lmDrop)
-    expect(stWide).toBeGreaterThan(cmWide)
-    expect(stThrough).toBeGreaterThan(stWide)
+    expect(stThrough).toBeGreaterThan(cmWide)
     // CM drifts towards the side LM vacated, not across the pitch.
     expect(frames[cmWide]!.positions.CM.x).toBeGreaterThan(start.LM.x)
+    // The striker holds his original position until the through ball is played.
+    for (const f of frames.slice(0, stThrough)) expect(f.positions.ST).toEqual(start.ST)
+    expect(Math.abs(frames[stThrough]!.positions.ST.x - start.ST.x)).toBeLessThan(6)
   })
 
   it('keeps every player inside the pitch in every frame and never moves the GK', () => {

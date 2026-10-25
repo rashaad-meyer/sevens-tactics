@@ -102,17 +102,17 @@ describe('app routing', () => {
     // Drills autoplay; pause so the assertions below are deterministic.
     await user.click(screen.getByRole('button', { name: 'Pause' }))
     await user.click(screen.getByRole('button', { name: 'Go to step 1' }))
-    expect(screen.getByText(/Step 1\/9/)).toBeInTheDocument()
+    expect(screen.getByText(/Step 1\/8/)).toBeInTheDocument()
     const ball = screen.getByTestId('ball')
     expect(ball).toHaveStyle({ transform: 'translate(56px, 135px)' })
     expect(screen.getByRole('img', { name: 'Goalkeeper (on the ball)' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Next' }))
-    expect(screen.getByText(/Step 2\/9/)).toBeInTheDocument()
+    expect(screen.getByText(/Step 2\/8/)).toBeInTheDocument()
     expect(ball).toHaveStyle({ transform: 'translate(33px, 128px)' })
     expect(screen.getByRole('img', { name: 'Left defender (on the ball)' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Go to step 9' }))
+    await user.click(screen.getByRole('button', { name: 'Go to step 8' }))
     expect(screen.getByText('Shot on goal.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Replay' })).toBeInTheDocument()
