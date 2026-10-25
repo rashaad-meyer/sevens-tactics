@@ -12,7 +12,7 @@ test.describe('attacking pattern 1', () => {
   test('is in the tactics dropdown under Patterns and starts playing on its own', async ({ page }) => {
     await page.goto('/#/tactics')
     const select = page.getByRole('combobox', { name: 'Tactic' })
-    await expect(select.locator('optgroup[label="Patterns"] option')).toHaveText(['Attacking Pattern 1'])
+    await expect(select.locator('optgroup[label="Patterns"] option')).toHaveText(['Attacking Pattern 1', 'Attacking Pattern 2'])
     await select.selectOption('Attacking Pattern 1')
     await expect(page).toHaveURL(/#\/tactics\/attacking-1$/)
     await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible()
@@ -78,5 +78,20 @@ test.describe('attacking pattern 1', () => {
     expect(pitch!.y + pitch!.height).toBeLessThanOrEqual(667)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)
     expect(overflow).toBe(true)
+  })
+})
+
+test.describe('attacking pattern 2', () => {
+  test('runs GK to CM, through ball to LM, cross, goal', async ({ page }) => {
+    await page.goto('/#/tactics/attacking-2')
+    await page.getByRole('button', { name: 'Go to step 1' }).click()
+    await expect(page.getByText('Step 1/8')).toBeVisible()
+    await page.getByRole('button', { name: 'Go to step 3' }).click()
+    await expect(page.getByRole('img', { name: 'Centre midfield (on the ball)' })).toBeVisible()
+    await page.getByRole('button', { name: 'Go to step 5' }).click()
+    await expect(page.getByRole('img', { name: 'Left midfield (on the ball)' })).toBeVisible()
+    await page.getByRole('button', { name: 'Go to step 8' }).click()
+    await expect(page.getByText('Goal.')).toBeVisible()
+    await expect(page.getByTestId('ball')).toHaveAttribute('style', /translate\(50px, 2\.5px\)/)
   })
 })

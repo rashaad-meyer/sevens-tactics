@@ -27,10 +27,11 @@ describe('tactics', () => {
       { value: 'defend-1', label: 'Defend 1 · 4-2-0' },
       { value: 'defend-2', label: 'Defend 2 · 3-3-0' },
       { value: 'attacking-1', label: 'Attacking Pattern 1' },
+      { value: 'attacking-2', label: 'Attacking Pattern 2' },
     ])
     expect(getTacticOptionGroups().map((g) => [g.label, g.options.length])).toEqual([
       ['Shapes', 3],
-      ['Patterns', 1],
+      ['Patterns', 2],
     ])
     expect(DEFAULT_TACTIC.id).toBe('attack')
     expect(formatTacticLabel(DEFAULT_TACTIC)).toBe('Attack · 2-3-1')

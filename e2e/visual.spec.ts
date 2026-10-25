@@ -33,16 +33,18 @@ test.describe('visual regression', () => {
     })
   }
 
-  test('attacking pattern 1 first step at 375px', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/#/tactics/attacking-1')
-    await page.evaluate(() => document.fonts.ready)
-    // Drills autoplay; jump to step 1 (which pauses) for a stable frame.
-    await page.getByRole('button', { name: 'Go to step 1' }).click()
-    await expect(page.getByText('Step 1/8')).toBeVisible()
-    await expect(page.getByTestId('ball')).toBeVisible()
-    await expect(page).toHaveScreenshot('tactics-attacking-1-375.png', { fullPage: true })
-  })
+  for (const [drill, step] of [['attacking-1', 7], ['attacking-2', 6]] as const) {
+    test(`${drill} at step ${step} at 375px`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.goto(`/#/tactics/${drill}`)
+      await page.evaluate(() => document.fonts.ready)
+      // Drills autoplay; jumping to a step pauses, giving a stable frame.
+      await page.getByRole('button', { name: `Go to step ${step}` }).click()
+      await expect(page.getByText(`Step ${step}/8`)).toBeVisible()
+      await expect(page.getByTestId('ball')).toBeVisible()
+      await expect(page).toHaveScreenshot(`tactics-${drill}-step${step}-375.png`, { fullPage: true })
+    })
+  }
 
   test('summary page at 375px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 })

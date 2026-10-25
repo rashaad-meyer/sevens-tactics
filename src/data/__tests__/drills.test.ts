@@ -47,8 +47,9 @@ describe('attacking pattern 1', () => {
     expect(Math.abs(frames[stThrough]!.positions.ST.x - start.ST.x)).toBeLessThan(6)
   })
 
-  it('keeps every player inside the pitch in every frame and never moves the GK', () => {
-    for (const frame of frames) {
+  it.each(DRILLS)('$id keeps every player inside the pitch in every frame and never moves the GK', (drill) => {
+    const drillFrames = resolveDrillFrames(drill)
+    for (const frame of drillFrames) {
       for (const slot of SLOTS) {
         const { x, y } = frame.positions[slot]
         expect(x).toBeGreaterThan(4)
@@ -56,7 +57,7 @@ describe('attacking pattern 1', () => {
         expect(y).toBeGreaterThan(4)
         expect(y).toBeLessThan(PITCH_VIEWBOX.height - 4)
       }
-      expect(frame.positions.GK).toEqual(frames[0]!.positions.GK)
+      expect(frame.positions.GK).toEqual(drillFrames[0]!.positions.GK)
     }
   })
 
@@ -70,8 +71,55 @@ describe('attacking pattern 1', () => {
   })
 
   it('exposes the drill list and lookup', () => {
-    expect(DRILLS.map((d) => d.id)).toEqual(['attacking-1'])
+    expect(DRILLS.map((d) => d.id)).toEqual(['attacking-1', 'attacking-2'])
     expect(getDrill('nope')).toBeUndefined()
     expect(Object.isFrozen(DRILLS)).toBe(true)
+  })
+})
+
+describe('attacking pattern 2', () => {
+  const pattern2 = getDrill('attacking-2')!
+  const frames2 = resolveDrillFrames(pattern2)
+  const start = frames2[0]!.positions
+
+  it('starts like pattern 1 with both defenders at the corners of the box', () => {
+    expect(start).toEqual(frames[0]!.positions)
+    expect(frames2[0]!.ballHolder).toBe('GK')
+  })
+
+  it('passes GK → CM → LM → CM and ends in the goal', () => {
+    const holders = frames2.map((f) => f.ballHolder)
+    const passes = holders.filter((h, i) => h && h !== holders[i - 1])
+    expect(passes).toEqual(['GK', 'CM', 'LM', 'CM'])
+    const last = frames2.at(-1)!
+    expect(last.ballHolder).toBeUndefined()
+    expect(last.ball.y).toBeLessThan(4)
+  })
+
+  it('CM comes close before receiving, then LM runs up the line and gets the through ball', () => {
+    const cmClose = frames2.findIndex((f) => f.positions.CM.y > start.CM.y + 15)
+    const cmReceives = frames2.findIndex((f) => f.ballHolder === 'CM')
+    const lmRuns = frames2.findIndex((f) => f.positions.LM.y < start.LM.y - 15)
+    const lmReceives = frames2.findIndex((f) => f.ballHolder === 'LM')
+    expect(cmClose).toBeGreaterThan(0)
+    expect(cmReceives).toBeGreaterThan(cmClose)
+    expect(lmRuns).toBeGreaterThan(cmReceives)
+    expect(lmReceives).toBeGreaterThan(lmRuns)
+    // LM stays near the left touchline all the way up.
+    for (const f of frames2.slice(lmRuns)) expect(f.positions.LM.x).toBeLessThan(16)
+  })
+
+  it('ST front post, CM middle, RM back post inside the box before the cross', () => {
+    const cross = frames2.findIndex((f, i) => i > 0 && f.ballHolder === 'CM' && frames2[i - 1]!.ballHolder === 'LM')
+    expect(cross).toBeGreaterThan(0)
+    const p = frames2[cross - 1]!.positions
+    for (const point of [p.ST, p.CM, p.RM]) {
+      expect(point.x).toBeGreaterThan(25)
+      expect(point.x).toBeLessThan(75)
+      expect(point.y).toBeLessThan(22)
+    }
+    expect(p.ST.x).toBeLessThan(p.CM.x)
+    expect(p.CM.x).toBeLessThan(p.RM.x)
+    expect(p.LM.y).toBeLessThan(22)
   })
 })

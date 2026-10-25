@@ -1,7 +1,7 @@
 import { FORMATION_231 } from './formation'
 import type { PitchPoint, SlotId } from './types'
 
-export type DrillId = 'attacking-1'
+export type DrillId = 'attacking-1' | 'attacking-2'
 
 export type BallState =
   | { readonly holder: SlotId }
@@ -40,6 +40,13 @@ const ATTACK_START = Object.fromEntries(
   FORMATION_231.map((slot) => [slot.slotId, { x: slot.x, y: slot.y }]),
 ) as Record<SlotId, PitchPoint>
 
+/** Build-up start: both defenders split to the corners of the box. */
+const BUILD_UP_START: Readonly<Record<SlotId, PitchPoint>> = {
+  ...ATTACK_START,
+  LCB: { x: 27, y: 123 },
+  RCB: { x: 73, y: 123 },
+}
+
 export const DRILLS: readonly Drill[] = Object.freeze([
   {
     kind: 'drill',
@@ -47,7 +54,7 @@ export const DRILLS: readonly Drill[] = Object.freeze([
     name: 'Attacking Pattern 1',
     description:
       'Build down the left: GK to the defender, into the dropping wide midfielder, inside to the CM, through ball for the striker.',
-    start: { ...ATTACK_START, LCB: { x: 27, y: 123 }, RCB: { x: 73, y: 123 } },
+    start: BUILD_UP_START,
     steps: [
       {
         caption: 'Set up. GK has the ball and both defenders take the corners of the box.',
@@ -92,6 +99,66 @@ export const DRILLS: readonly Drill[] = Object.freeze([
         move: { ST: { x: 47, y: 12 } },
         ball: { point: { x: 51, y: 2.5 } },
         durationMs: 450,
+      },
+    ],
+  },
+  {
+    kind: 'drill',
+    id: 'attacking-2',
+    name: 'Attacking Pattern 2',
+    description:
+      'Through the middle then wide: GK to the CM, through ball for the wide midfielder, cross into three runners.',
+    start: BUILD_UP_START,
+    steps: [
+      {
+        caption: 'Set up. GK has the ball and both defenders take the corners of the box.',
+        ball: { holder: 'GK' },
+        durationMs: 0,
+      },
+      {
+        caption: 'The CM comes in close to receive.',
+        move: { CM: { x: 50, y: 102 } },
+        ball: { holder: 'GK' },
+        durationMs: 700,
+      },
+      {
+        caption: 'GK plays it into the CM.',
+        ball: { holder: 'CM' },
+        durationMs: 600,
+      },
+      {
+        caption: 'The left midfielder makes a run up the line.',
+        move: { LM: { x: 14, y: 40 } },
+        ball: { holder: 'CM' },
+        durationMs: 800,
+      },
+      {
+        caption: 'CM plays a through ball up the line.',
+        move: { LM: { x: 12, y: 28 } },
+        ball: { holder: 'LM' },
+        durationMs: 800,
+      },
+      {
+        caption: 'Left midfielder takes it up the side. ST, CM and RM run into the box.',
+        move: {
+          LM: { x: 10, y: 12 },
+          ST: { x: 40, y: 11 },
+          CM: { x: 50, y: 15 },
+          RM: { x: 61, y: 11 },
+        },
+        ball: { holder: 'LM' },
+        durationMs: 900,
+      },
+      {
+        caption: 'Ball into the box: ST front post, CM middle, RM back post. The CM meets it.',
+        ball: { holder: 'CM' },
+        durationMs: 600,
+      },
+      {
+        caption: 'Goal.',
+        move: { CM: { x: 50, y: 12 } },
+        ball: { point: { x: 50, y: 2.5 } },
+        durationMs: 400,
       },
     ],
   },
