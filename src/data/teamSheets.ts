@@ -3,7 +3,7 @@ import type { TeamSheet } from './types'
 /**
  * Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets),
  * with later edits: G1H2 Adam ST / James CM / Tumelo DEF; G3H2 Rashaad ST / James CM;
- * then the whole G1H2 and G4H2 sheets swapped.
+ * then the whole G1H2 and G4H2 sheets swapped; G1H1 Laurie Ann RM in place of Hannah.
  */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
@@ -14,7 +14,7 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
       ST: 'adam',
       LM: 'cass',
       CM: 'rashaad',
-      RM: 'hannah',
+      RM: 'laurie-ann',
       LCB: 'josh',
       RCB: 'angelo',
       GK: 'jayden',

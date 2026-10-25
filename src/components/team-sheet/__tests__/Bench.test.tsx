@@ -11,7 +11,7 @@ describe('Bench', () => {
     expect(details).not.toHaveAttribute('open')
     expect(screen.getByText('7 players')).toBeInTheDocument()
     const names = screen.getAllByRole('listitem').map((li) => li.textContent)
-    expect(names).toEqual(['Laura', 'Laurie Ann', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'])
+    expect(names).toEqual(['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'])
   })
 
   it('colour-codes chips by gender', () => {

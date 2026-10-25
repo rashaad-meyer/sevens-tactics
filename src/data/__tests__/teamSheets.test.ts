@@ -5,9 +5,9 @@ import { countGirlsOnPitch, getBench, getHalvesPlayed, getLineupPlacements } fro
 import { MIN_GIRLS_ON_PITCH, TEAM_SHEETS } from '../teamSheets'
 import type { SheetKey, SlotId } from '../types'
 
-/** Bench lists from the corrected reference HTML, with G1H2 and G4H2 swapped. */
+/** Bench lists from the corrected reference HTML, with later edits applied. */
 const EXPECTED_BENCH: Record<SheetKey, string[]> = {
-  g1h1: ['Laura', 'Laurie Ann', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'],
+  g1h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'],
   g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad', 'James'],
   g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Alex', 'Tumelo', 'Rashaad', 'James'],
   g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Jayden', 'Angelo', 'Alex'],
@@ -62,6 +62,7 @@ describe('team sheet data integrity', () => {
     expect(g1h2).toMatchObject({ ST: 'laura', LM: 'maria', CM: 'tumelo', RM: 'hannah', LCB: 'declan', RCB: 'alex' })
     const g3h2 = TEAM_SHEETS.find((s) => s.key === 'g3h2')!.lineup
     expect(g3h2).toMatchObject({ ST: 'rashaad', CM: 'james' })
+    expect(TEAM_SHEETS[0]!.lineup.RM).toBe('laurie-ann')
   })
 
   it('Jayden keeps goal except in Game 2, when Declan does', () => {
@@ -92,15 +93,15 @@ describe('getLineupPlacements', () => {
 })
 
 describe('getHalvesPlayed', () => {
-  it('matches the reference summary tables', () => {
+  it('matches the reference summary tables, with Hannah and Laurie Ann adjusted for the G1H1 edit', () => {
     const table = Object.fromEntries(
       getHalvesPlayed().map((h) => [h.player.name, [h.outfield, h.inGoal]]),
     )
     expect(table).toEqual({
       Cass: [4, 0],
-      Hannah: [4, 0],
+      Hannah: [3, 0],
       Laura: [4, 0],
-      'Laurie Ann': [3, 0],
+      'Laurie Ann': [4, 0],
       Maria: [3, 0],
       Josh: [4, 0],
       Rashaad: [4, 0],

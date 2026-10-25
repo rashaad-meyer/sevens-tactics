@@ -13,6 +13,7 @@ describe('TeamSheet markers', () => {
     expect(within(layer).getAllByTestId('name-plate')).toHaveLength(7)
     expect(screen.getByRole('img', { name: 'Striker: Adam' })).toHaveClass('marker--boy')
     expect(screen.getByRole('img', { name: 'Left midfield: Cass' })).toHaveClass('marker--girl')
+    expect(screen.getByRole('img', { name: 'Right midfield: Laurie Ann' })).toHaveClass('marker--girl')
     expect(screen.getByRole('img', { name: 'Goalkeeper: Jayden' })).toHaveClass('marker--gk')
     expect(layer.textContent).toContain('ST')
     expect(layer.textContent).toContain('Rashaad')

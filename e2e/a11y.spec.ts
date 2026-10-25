@@ -23,7 +23,7 @@ test.describe('accessibility', () => {
       'Striker: Adam',
       'Left midfield: Cass',
       'Centre midfield: Rashaad',
-      'Right midfield: Hannah',
+      'Right midfield: Laurie Ann',
       'Left defender: Josh',
       'Right defender: Angelo',
       'Goalkeeper: Jayden',
