@@ -13,7 +13,7 @@ test.describe('team sheet viewer', () => {
     await page.goto('/')
     await page.getByRole('combobox', { name: 'Team sheet' }).selectOption('Game 2 | Half 1')
     await expect(page).toHaveURL(/#\/sheet\/2\/1$/)
-    await expect(page.getByRole('img', { name: 'Goalkeeper: Declan' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Goalkeeper: Rashaad' })).toBeVisible()
     await expect(page.getByRole('img', { name: 'Right defender: Jayden' })).toBeVisible()
   })
 
@@ -47,7 +47,7 @@ test.describe('team sheet viewer', () => {
     await expect(list).toBeHidden()
     await page.getByText('Off', { exact: true }).click()
     await expect(list).toBeVisible()
-    await expect(list.getByRole('listitem')).toHaveCount(7)
+    await expect(list.getByRole('listitem')).toHaveCount(6)
   })
 
   test('keyboard: the select is reachable by Tab and operable', async ({ page, browserName }) => {

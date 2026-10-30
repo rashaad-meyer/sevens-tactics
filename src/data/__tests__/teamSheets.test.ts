@@ -5,16 +5,16 @@ import { countGirlsOnPitch, getBench, getHalvesPlayed, getLineupPlacements } fro
 import { MIN_GIRLS_ON_PITCH, TEAM_SHEETS } from '../teamSheets'
 import type { SheetKey, SlotId } from '../types'
 
-/** Bench lists from the corrected reference HTML, with later edits applied. */
+/** Bench lists from the corrected reference HTML, with later edits and James's withdrawal applied. */
 const EXPECTED_BENCH: Record<SheetKey, string[]> = {
-  g1h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'],
-  g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad', 'James'],
-  g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Alex', 'Tumelo', 'Rashaad', 'James'],
-  g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Jayden', 'Angelo', 'Alex'],
-  g3h1: ['Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo', 'Rashaad', 'James'],
-  g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Angelo', 'Adam'],
-  g4h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Adam', 'Angelo', 'Tumelo'],
-  g4h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Angelo', 'Rashaad', 'Alex'],
+  g1h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo'],
+  g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad'],
+  g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Declan', 'Alex', 'Tumelo'],
+  g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Angelo', 'Alex'],
+  g3h1: ['Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo', 'Rashaad'],
+  g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Adam'],
+  g4h1: ['Hannah', 'Laura', 'Maria', 'Adam', 'Angelo', 'Tumelo'],
+  g4h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Declan', 'Angelo'],
 }
 
 const GIRL_SLOTS: readonly SlotId[] = ['ST', 'LM', 'RM']
@@ -57,17 +57,26 @@ describe('team sheet data integrity', () => {
 
   it('carries the later line-up edits and the G1H2/G4H2 swap', () => {
     const g4h2 = TEAM_SHEETS.find((s) => s.key === 'g4h2')!.lineup
-    expect(g4h2).toMatchObject({ ST: 'adam', CM: 'james', RCB: 'tumelo', LCB: 'declan' })
+    expect(g4h2).toMatchObject({ ST: 'adam', LM: 'laura', RM: 'laurie-ann' })
     const g1h2 = TEAM_SHEETS.find((s) => s.key === 'g1h2')!.lineup
     expect(g1h2).toMatchObject({ ST: 'laura', LM: 'maria', CM: 'tumelo', RM: 'hannah', LCB: 'declan', RCB: 'alex' })
     const g3h2 = TEAM_SHEETS.find((s) => s.key === 'g3h2')!.lineup
-    expect(g3h2).toMatchObject({ ST: 'rashaad', CM: 'james' })
+    expect(g3h2).toMatchObject({ ST: 'rashaad', LM: 'hannah', RM: 'laura' })
     expect(TEAM_SHEETS[0]!.lineup.RM).toBe('laurie-ann')
   })
 
-  it('Jayden keeps goal except in Game 2, when Declan does', () => {
+  it("hands James's four halves to Jayden, Angelo, Declan and Alex", () => {
+    const lineup = (key: SheetKey) => TEAM_SHEETS.find((s) => s.key === key)!.lineup
+    expect(lineup('g2h2')).toMatchObject({ GK: 'rashaad', RCB: 'jayden', LCB: 'declan' })
+    expect(lineup('g3h2')).toMatchObject({ CM: 'angelo' })
+    expect(lineup('g4h1')).toMatchObject({ CM: 'declan' })
+    expect(lineup('g4h2')).toMatchObject({ CM: 'rashaad', LCB: 'tumelo', RCB: 'alex' })
+    expect(SQUAD.some((p) => p.name === 'James')).toBe(false)
+  })
+
+  it('Jayden keeps goal except in Game 2, when Rashaad does; Declan never does', () => {
     for (const sheet of TEAM_SHEETS) {
-      expect(sheet.lineup.GK).toBe(sheet.game === 2 ? 'declan' : 'jayden')
+      expect(sheet.lineup.GK).toBe(sheet.game === 2 ? 'rashaad' : 'jayden')
     }
   })
 })
@@ -85,15 +94,16 @@ describe('getLineupPlacements', () => {
     const byName = Object.fromEntries(
       getLineupPlacements(g2h1).map((p) => [p.player.name, p.variant]),
     )
-    expect(byName['Declan']).toBe('gk')
+    expect(byName['Rashaad']).toBe('gk')
     expect(byName['Jayden']).toBe('boy')
+    expect(byName['Declan']).toBeUndefined()
     expect(byName['Maria']).toBe('girl')
     expect(byName['Adam']).toBe('boy')
   })
 })
 
 describe('getHalvesPlayed', () => {
-  it('matches the reference summary tables, with Hannah and Laurie Ann adjusted for the G1H1 edit', () => {
+  it("matches the reference summary tables after the G1H1 edit and James's withdrawal", () => {
     const table = Object.fromEntries(
       getHalvesPlayed().map((h) => [h.player.name, [h.outfield, h.inGoal]]),
     )
@@ -104,14 +114,13 @@ describe('getHalvesPlayed', () => {
       'Laurie Ann': [4, 0],
       Maria: [3, 0],
       Josh: [4, 0],
-      Rashaad: [4, 0],
-      James: [4, 0],
+      Rashaad: [4, 2],
       Adam: [4, 0],
       Tumelo: [4, 0],
-      Alex: [3, 0],
-      Angelo: [3, 0],
-      Declan: [3, 2],
-      Jayden: [1, 6],
+      Alex: [4, 0],
+      Angelo: [4, 0],
+      Declan: [4, 0],
+      Jayden: [2, 6],
     })
   })
 })

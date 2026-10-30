@@ -9,9 +9,9 @@ describe('Bench', () => {
     const { container } = render(<Bench players={getBench(getSheet('g1h1')!)} />)
     const details = container.querySelector('details')
     expect(details).not.toHaveAttribute('open')
-    expect(screen.getByText('7 players')).toBeInTheDocument()
+    expect(screen.getByText('6 players')).toBeInTheDocument()
     const names = screen.getAllByRole('listitem').map((li) => li.textContent)
-    expect(names).toEqual(['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo', 'James'])
+    expect(names).toEqual(['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo'])
   })
 
   it('colour-codes chips by gender', () => {

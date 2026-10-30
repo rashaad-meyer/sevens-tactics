@@ -38,7 +38,7 @@ describe('app routing', () => {
     await screen.findByRole('heading', { name: 'Game 1, half 1 team sheet' })
     await user.selectOptions(select(), 'Game 2 | Half 1')
     expect(router.state.location.pathname).toBe('/sheet/2/1')
-    expect(await screen.findByRole('img', { name: 'Goalkeeper: Declan' })).toBeInTheDocument()
+    expect(await screen.findByRole('img', { name: 'Goalkeeper: Rashaad' })).toBeInTheDocument()
   })
 
   it('offers previous and next links below the sheet', async () => {
@@ -62,14 +62,14 @@ describe('app routing', () => {
     expect(await screen.findByRole('heading', { name: 'Summary' })).toBeInTheDocument()
     const boys = screen.getByRole('region', { name: 'Halves played – boys' })
     const jayden = within(boys).getByText('Jayden').closest('tr')!
-    expect(jayden.textContent).toContain('1 (+6 in goal)')
+    expect(jayden.textContent).toContain('2 (+6 in goal)')
     expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
     const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
     const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!
     expect(within(adamRow).getAllByRole('cell').map((c) => c.textContent)).toEqual([
-      '1,1', '2,1', '2,2', '4,2', '', '', '',
+      '1,1', '2,1', '2,2', '4,2', '', '', '', '',
     ])
-    expect(within(table).getAllByRole('rowheader')).toHaveLength(14)
+    expect(within(table).getAllByRole('rowheader')).toHaveLength(13)
   })
 
   it('redirects /tactics to the Attack shape and swaps the header select', async () => {

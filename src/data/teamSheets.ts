@@ -4,6 +4,9 @@ import type { TeamSheet } from './types'
  * Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets),
  * with later edits: G1H2 Adam ST / James CM / Tumelo DEF; G3H2 Rashaad ST / James CM;
  * then the whole G1H2 and G4H2 sheets swapped; G1H1 Laurie Ann RM in place of Hannah.
+ * James withdrew: his four halves went to Jayden (G2H2), Angelo (G3H2), Declan (G4H1)
+ * and Alex (G4H2); Rashaad keeps goal for Game 2 with Jayden outfield, and Declan came
+ * off G2H1 and G4H2 (Rashaad in at CM) so that both play four outfield halves.
  */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
@@ -45,7 +48,7 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
       RM: 'cass',
       LCB: 'josh',
       RCB: 'jayden',
-      GK: 'declan',
+      GK: 'rashaad',
     },
   },
   {
@@ -53,13 +56,13 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 2,
     half: 2,
     lineup: {
-      ST: 'rashaad',
+      ST: 'adam',
       LM: 'hannah',
-      CM: 'james',
+      CM: 'tumelo',
       RM: 'laura',
-      LCB: 'tumelo',
-      RCB: 'adam',
-      GK: 'declan',
+      LCB: 'declan',
+      RCB: 'jayden',
+      GK: 'rashaad',
     },
   },
   {
@@ -83,7 +86,7 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     lineup: {
       ST: 'rashaad',
       LM: 'hannah',
-      CM: 'james',
+      CM: 'angelo',
       RM: 'laura',
       LCB: 'declan',
       RCB: 'tumelo',
@@ -97,7 +100,7 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     lineup: {
       ST: 'rashaad',
       LM: 'laurie-ann',
-      CM: 'james',
+      CM: 'declan',
       RM: 'cass',
       LCB: 'josh',
       RCB: 'alex',
@@ -111,10 +114,10 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     lineup: {
       ST: 'adam',
       LM: 'laura',
-      CM: 'james',
+      CM: 'rashaad',
       RM: 'laurie-ann',
-      LCB: 'declan',
-      RCB: 'tumelo',
+      LCB: 'tumelo',
+      RCB: 'alex',
       GK: 'jayden',
     },
   },
@@ -134,5 +137,5 @@ export const MIN_GIRLS_ON_PITCH = 2
 export const SELECTION_RULES: readonly string[] = Object.freeze([
   'Minimum 2 girls on the pitch in every half.',
   'Girls play wide midfield or striker only.',
-  'Jayden keeps goal in every half except Game 2, when Declan takes over.',
+  'Jayden keeps goal in every half except Game 2, when Rashaad takes over.',
 ])

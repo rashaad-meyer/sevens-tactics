@@ -54,7 +54,7 @@ describe('parseSheetParams', () => {
 
 describe('getSheet and getAdjacentSheet', () => {
   it('finds a sheet by key', () => {
-    expect(getSheet(sheetKey(2, 2))?.lineup.ST).toBe('rashaad')
+    expect(getSheet(sheetKey(2, 2))?.lineup.GK).toBe('rashaad')
   })
 
   it('steps forward and backward through the sheets', () => {
@@ -93,17 +93,19 @@ describe('getAppearances', () => {
   it('lists players alphabetically with their halves in playing order', () => {
     const rows = getAppearances()
     expect(rows.map((r) => r.player.name)).toEqual([
-      'Adam', 'Alex', 'Angelo', 'Cass', 'Declan', 'Hannah', 'James',
+      'Adam', 'Alex', 'Angelo', 'Cass', 'Declan', 'Hannah',
       'Jayden', 'Josh', 'Laura', 'Laurie Ann', 'Maria', 'Rashaad', 'Tumelo',
     ])
     const adam = rows.find((r) => r.player.name === 'Adam')!
     expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '2,1', '2,2', '4,2'])
     const jayden = rows.find((r) => r.player.name === 'Jayden')!
     expect(jayden.appearances.map(formatAppearance)).toEqual([
-      '1,1 GK', '1,2 GK', '2,1', '3,1 GK', '3,2 GK', '4,1 GK', '4,2 GK',
+      '1,1 GK', '1,2 GK', '2,1', '2,2', '3,1 GK', '3,2 GK', '4,1 GK', '4,2 GK',
     ])
     const declan = rows.find((r) => r.player.name === 'Declan')!
-    expect(declan.appearances.map(formatAppearance)).toEqual(['1,2', '2,1 GK', '2,2 GK', '3,2', '4,2'])
+    expect(declan.appearances.map(formatAppearance)).toEqual(['1,2', '2,2', '3,2', '4,1'])
+    const rashaad = rows.find((r) => r.player.name === 'Rashaad')!
+    expect(rashaad.appearances.map(formatAppearance)).toEqual(['1,1', '2,1 GK', '2,2 GK', '3,2', '4,1', '4,2'])
   })
 
   it('agrees with the halves-played totals', () => {

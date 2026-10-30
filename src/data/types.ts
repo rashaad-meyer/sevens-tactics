@@ -13,7 +13,6 @@ export type PlayerId =
   | 'rashaad'
   | 'angelo'
   | 'tumelo'
-  | 'james'
   | 'jayden'
 
 export interface Player {

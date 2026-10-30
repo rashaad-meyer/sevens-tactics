@@ -2,7 +2,8 @@ import type { Player, PlayerId } from './types'
 
 /**
  * Squad in canonical order. This order is also the bench order used in the
- * original team sheets: girls alphabetically, then boys.
+ * original team sheets: girls alphabetically, then boys. James withdrew before
+ * the tournament and is no longer in the squad.
  */
 export const SQUAD: readonly Player[] = Object.freeze([
   { id: 'cass', name: 'Cass', gender: 'f' },
@@ -17,7 +18,6 @@ export const SQUAD: readonly Player[] = Object.freeze([
   { id: 'rashaad', name: 'Rashaad', gender: 'm' },
   { id: 'angelo', name: 'Angelo', gender: 'm' },
   { id: 'tumelo', name: 'Tumelo', gender: 'm' },
-  { id: 'james', name: 'James', gender: 'm' },
   { id: 'jayden', name: 'Jayden', gender: 'm' },
 ] as const satisfies readonly Player[])
 

@@ -27,7 +27,7 @@ describe('TeamSheet markers', () => {
 
   it('uses the gk variant by slot, not by player', () => {
     render(<TeamSheet sheet={getSheet('g2h1')!} />)
-    expect(screen.getByRole('img', { name: 'Goalkeeper: Declan' })).toHaveClass('marker--gk')
+    expect(screen.getByRole('img', { name: 'Goalkeeper: Rashaad' })).toHaveClass('marker--gk')
     expect(screen.getByRole('img', { name: 'Right defender: Jayden' })).toHaveClass('marker--boy')
   })
 
