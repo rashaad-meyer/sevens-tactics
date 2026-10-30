@@ -99,7 +99,7 @@ describe('getAvailability', () => {
     const byName = (name: string) => rows.find((r) => r.player.name === name)!.halves.map((h) => h.status)
     expect(byName('Adam')).toEqual(['playing', 'off', 'playing', 'playing', 'off', 'off', 'off', 'playing'])
     expect(byName('Jayden')).toEqual([
-      'goalkeeper', 'goalkeeper', 'playing', 'playing', 'playing', 'goalkeeper', 'goalkeeper', 'goalkeeper',
+      'goalkeeper', 'goalkeeper', 'playing', 'off', 'playing', 'goalkeeper', 'goalkeeper', 'goalkeeper',
     ])
     expect(byName('Declan')).toEqual(['off', 'playing', 'off', 'playing', 'off', 'playing', 'playing', 'off'])
   })

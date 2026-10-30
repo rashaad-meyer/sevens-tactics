@@ -10,7 +10,7 @@ const EXPECTED_BENCH: Record<SheetKey, string[]> = {
   g1h1: ['Hannah', 'Laura', 'Maria', 'Declan', 'Alex', 'Tumelo'],
   g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad'],
   g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Declan', 'Alex', 'Tumelo'],
-  g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Angelo', 'Alex'],
+  g2h2: ['Laurie Ann', 'Maria', 'Josh', 'Alex', 'Angelo', 'Jayden'],
   g3h1: ['Cass', 'Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo'],
   g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Adam'],
   g4h1: ['Hannah', 'Laura', 'Maria', 'Adam', 'Angelo', 'Tumelo'],
@@ -65,9 +65,11 @@ describe('team sheet data integrity', () => {
     expect(TEAM_SHEETS[0]!.lineup.RM).toBe('laurie-ann')
   })
 
-  it("hands James's four halves to Jayden, Angelo, Declan and Alex", () => {
+  it("hands James's halves to Angelo, Declan and Alex, with Cass in for Jayden in G2H2", () => {
     const lineup = (key: SheetKey) => TEAM_SHEETS.find((s) => s.key === key)!.lineup
-    expect(lineup('g2h2')).toMatchObject({ GK: 'rashaad', RCB: 'jayden', LCB: 'declan' })
+    expect(lineup('g2h2')).toEqual({
+      ST: 'hannah', LM: 'laura', CM: 'tumelo', RM: 'cass', LCB: 'declan', RCB: 'adam', GK: 'rashaad',
+    })
     expect(lineup('g3h2')).toMatchObject({ CM: 'angelo' })
     expect(lineup('g3h1')).toMatchObject({ ST: 'jayden', GK: 'rashaad' })
     expect(lineup('g4h1')).toMatchObject({ CM: 'declan' })
@@ -110,7 +112,7 @@ describe('getHalvesPlayed', () => {
       getHalvesPlayed().map((h) => [h.player.name, [h.outfield, h.inGoal]]),
     )
     expect(table).toEqual({
-      Cass: [3, 0],
+      Cass: [4, 0],
       Hannah: [3, 0],
       Laura: [4, 0],
       'Laurie Ann': [4, 0],
@@ -122,7 +124,7 @@ describe('getHalvesPlayed', () => {
       Alex: [4, 0],
       Angelo: [4, 0],
       Declan: [4, 0],
-      Jayden: [3, 5],
+      Jayden: [2, 5],
     })
   })
 })

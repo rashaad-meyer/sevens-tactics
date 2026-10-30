@@ -4,10 +4,11 @@ import type { TeamSheet } from './types'
  * Transcribed from docs/reference/mixed-7s-team-sheets.html (corrected sheets),
  * with later edits: G1H2 Adam ST / James CM / Tumelo DEF; G3H2 Rashaad ST / James CM;
  * then the whole G1H2 and G4H2 sheets swapped; G1H1 Laurie Ann RM in place of Hannah.
- * James withdrew: his four halves went to Jayden (G2H2), Angelo (G3H2), Declan (G4H1)
- * and Alex (G4H2); Rashaad keeps goal for Game 2 with Jayden outfield, and Declan came
- * off G2H1 and G4H2 (Rashaad in at CM) so that both play four outfield halves.
+ * James withdrew: his four halves went to Angelo (G3H2), Declan (G4H1), Alex (G4H2) and,
+ * at first, Jayden (G2H2); Rashaad keeps goal for Game 2, and Declan came off G2H1 and
+ * G4H2 (Rashaad in at CM) so that both play four outfield halves.
  * G3H1: Jayden ST in place of Cass, with Rashaad in goal.
+ * G2H2: Cass in for Jayden; Hannah ST, Laura LM, Cass RM, Adam back to RCB.
  */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
@@ -57,12 +58,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 2,
     half: 2,
     lineup: {
-      ST: 'adam',
-      LM: 'hannah',
+      ST: 'hannah',
+      LM: 'laura',
       CM: 'tumelo',
-      RM: 'laura',
+      RM: 'cass',
       LCB: 'declan',
-      RCB: 'jayden',
+      RCB: 'adam',
       GK: 'rashaad',
     },
   },
