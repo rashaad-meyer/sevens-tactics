@@ -7,6 +7,7 @@ import type { TeamSheet } from './types'
  * James withdrew: his four halves went to Jayden (G2H2), Angelo (G3H2), Declan (G4H1)
  * and Alex (G4H2); Rashaad keeps goal for Game 2 with Jayden outfield, and Declan came
  * off G2H1 and G4H2 (Rashaad in at CM) so that both play four outfield halves.
+ * G3H1: Jayden ST in place of Cass, with Rashaad in goal.
  */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
@@ -70,13 +71,13 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 3,
     half: 1,
     lineup: {
-      ST: 'cass',
+      ST: 'jayden',
       LM: 'laurie-ann',
       CM: 'angelo',
       RM: 'maria',
       LCB: 'josh',
       RCB: 'alex',
-      GK: 'jayden',
+      GK: 'rashaad',
     },
   },
   {
@@ -137,5 +138,5 @@ export const MIN_GIRLS_ON_PITCH = 2
 export const SELECTION_RULES: readonly string[] = Object.freeze([
   'Minimum 2 girls on the pitch in every half.',
   'Girls play wide midfield or striker only.',
-  'Jayden keeps goal in every half except Game 2, when Rashaad takes over.',
+  'Jayden keeps goal in every half except Game 2 and Game 3 Half 1, when Rashaad takes over.',
 ])

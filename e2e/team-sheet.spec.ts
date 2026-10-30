@@ -28,7 +28,7 @@ test.describe('team sheet viewer', () => {
 
   test('deep links and prev/next work', async ({ page }) => {
     await page.goto('/#/sheet/3/1')
-    await expect(page.getByRole('img', { name: 'Striker: Cass' })).toBeVisible()
+    await expect(page.getByRole('img', { name: 'Striker: Jayden' })).toBeVisible()
     await expect(page.getByRole('img', { name: 'Left midfield: Laurie Ann' })).toContainText('LA')
     await page.getByRole('link', { name: 'Next: Game 3 | Half 2' }).click()
     await expect(page).toHaveURL(/#\/sheet\/3\/2$/)

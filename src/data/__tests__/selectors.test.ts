@@ -100,12 +100,12 @@ describe('getAppearances', () => {
     expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '2,1', '2,2', '4,2'])
     const jayden = rows.find((r) => r.player.name === 'Jayden')!
     expect(jayden.appearances.map(formatAppearance)).toEqual([
-      '1,1 GK', '1,2 GK', '2,1', '2,2', '3,1 GK', '3,2 GK', '4,1 GK', '4,2 GK',
+      '1,1 GK', '1,2 GK', '2,1', '2,2', '3,1', '3,2 GK', '4,1 GK', '4,2 GK',
     ])
     const declan = rows.find((r) => r.player.name === 'Declan')!
     expect(declan.appearances.map(formatAppearance)).toEqual(['1,2', '2,2', '3,2', '4,1'])
     const rashaad = rows.find((r) => r.player.name === 'Rashaad')!
-    expect(rashaad.appearances.map(formatAppearance)).toEqual(['1,1', '2,1 GK', '2,2 GK', '3,2', '4,1', '4,2'])
+    expect(rashaad.appearances.map(formatAppearance)).toEqual(['1,1', '2,1 GK', '2,2 GK', '3,1 GK', '3,2', '4,1', '4,2'])
   })
 
   it('agrees with the halves-played totals', () => {

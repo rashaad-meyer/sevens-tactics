@@ -62,7 +62,7 @@ describe('app routing', () => {
     expect(await screen.findByRole('heading', { name: 'Summary' })).toBeInTheDocument()
     const boys = screen.getByRole('region', { name: 'Halves played – boys' })
     const jayden = within(boys).getByText('Jayden').closest('tr')!
-    expect(jayden.textContent).toContain('2 (+6 in goal)')
+    expect(jayden.textContent).toContain('3 (+5 in goal)')
     expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
     const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
     const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!

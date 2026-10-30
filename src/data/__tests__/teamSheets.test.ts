@@ -11,7 +11,7 @@ const EXPECTED_BENCH: Record<SheetKey, string[]> = {
   g1h2: ['Cass', 'Laurie Ann', 'Josh', 'Adam', 'Angelo', 'Rashaad'],
   g2h1: ['Hannah', 'Laura', 'Laurie Ann', 'Declan', 'Alex', 'Tumelo'],
   g2h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Angelo', 'Alex'],
-  g3h1: ['Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo', 'Rashaad'],
+  g3h1: ['Cass', 'Hannah', 'Laura', 'Declan', 'Adam', 'Tumelo'],
   g3h2: ['Cass', 'Laurie Ann', 'Maria', 'Josh', 'Alex', 'Adam'],
   g4h1: ['Hannah', 'Laura', 'Maria', 'Adam', 'Angelo', 'Tumelo'],
   g4h2: ['Cass', 'Hannah', 'Maria', 'Josh', 'Declan', 'Angelo'],
@@ -69,14 +69,16 @@ describe('team sheet data integrity', () => {
     const lineup = (key: SheetKey) => TEAM_SHEETS.find((s) => s.key === key)!.lineup
     expect(lineup('g2h2')).toMatchObject({ GK: 'rashaad', RCB: 'jayden', LCB: 'declan' })
     expect(lineup('g3h2')).toMatchObject({ CM: 'angelo' })
+    expect(lineup('g3h1')).toMatchObject({ ST: 'jayden', GK: 'rashaad' })
     expect(lineup('g4h1')).toMatchObject({ CM: 'declan' })
     expect(lineup('g4h2')).toMatchObject({ CM: 'rashaad', LCB: 'tumelo', RCB: 'alex' })
     expect(SQUAD.some((p) => p.name === 'James')).toBe(false)
   })
 
-  it('Jayden keeps goal except in Game 2, when Rashaad does; Declan never does', () => {
+  it('Jayden keeps goal except in Game 2 and Game 3 Half 1, when Rashaad does; Declan never does', () => {
     for (const sheet of TEAM_SHEETS) {
-      expect(sheet.lineup.GK).toBe(sheet.game === 2 ? 'rashaad' : 'jayden')
+      const rashaadKeeps = sheet.game === 2 || sheet.key === 'g3h1'
+      expect(sheet.lineup.GK).toBe(rashaadKeeps ? 'rashaad' : 'jayden')
     }
   })
 })
@@ -108,19 +110,19 @@ describe('getHalvesPlayed', () => {
       getHalvesPlayed().map((h) => [h.player.name, [h.outfield, h.inGoal]]),
     )
     expect(table).toEqual({
-      Cass: [4, 0],
+      Cass: [3, 0],
       Hannah: [3, 0],
       Laura: [4, 0],
       'Laurie Ann': [4, 0],
       Maria: [3, 0],
       Josh: [4, 0],
-      Rashaad: [4, 2],
+      Rashaad: [4, 3],
       Adam: [4, 0],
       Tumelo: [4, 0],
       Alex: [4, 0],
       Angelo: [4, 0],
       Declan: [4, 0],
-      Jayden: [2, 6],
+      Jayden: [3, 5],
     })
   })
 })
