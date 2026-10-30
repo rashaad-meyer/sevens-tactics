@@ -48,8 +48,10 @@ function AvailabilityGrid({ rows }: { rows: readonly PlayerAvailability[] }) {
               <tr key={player.id}>
                 <th scope="row">{player.name}</th>
                 {halves.map(({ sheet, status }) => (
-                  <td key={sheet.key} className={`appearances__cell appearances__cell--${status}`}>
-                    {status === 'goalkeeper' ? <span aria-hidden="true">GK</span> : null}
+                  <td key={sheet.key} className="appearances__cell">
+                    <span className={`appearances__block appearances__block--${status}`} aria-hidden="true">
+                      {status === 'goalkeeper' ? 'GK' : ''}
+                    </span>
                     <span className="visually-hidden">{STATUS_TEXT[status]}</span>
                   </td>
                 ))}
@@ -62,7 +64,7 @@ function AvailabilityGrid({ rows }: { rows: readonly PlayerAvailability[] }) {
         {LEGEND.map((item) => (
           <li key={item.status} className="appearances-legend__item">
             <span
-              className={`appearances-legend__swatch appearances__cell--${item.status}`}
+              className={`appearances-legend__swatch appearances__block--${item.status}`}
               aria-hidden="true"
             />
             {item.label}

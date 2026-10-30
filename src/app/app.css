@@ -200,12 +200,21 @@
 }
 
 .appearances {
-  border-collapse: separate;
-  border-spacing: 3px;
+  border-collapse: collapse;
   width: max-content;
   min-width: 100%;
-  margin-inline: -3px;
   font-size: var(--text-sm);
+}
+
+/* Light rule between rows so the eye can track a player across the halves. */
+.appearances tbody th,
+.appearances tbody td {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.appearances tbody tr:last-child th,
+.appearances tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .appearances th {
@@ -237,25 +246,34 @@
 }
 
 .appearances__cell {
-  min-width: 30px;
+  padding: 3px 1.5px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.appearances__block {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
   height: 30px;
   border-radius: var(--radius-sm);
-  text-align: center;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.8rem;
+  line-height: 1;
   letter-spacing: 0.04em;
 }
 
-.appearances__cell--playing {
+.appearances__block--playing {
   background: var(--color-on);
 }
 
-.appearances__cell--off {
+.appearances__block--off {
   background: var(--color-off);
 }
 
-.appearances__cell--goalkeeper {
+.appearances__block--goalkeeper {
   background: var(--color-keeper);
   color: var(--color-keeper-ink);
 }

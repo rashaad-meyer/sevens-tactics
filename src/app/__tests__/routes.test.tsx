@@ -71,15 +71,15 @@ describe('app routing', () => {
       'Playing', 'Off', 'Playing', 'Playing', 'Off', 'Off', 'Off', 'Playing',
     ])
     const rashaadRow = within(table).getByRole('rowheader', { name: 'Rashaad' }).closest('tr')!
-    expect(within(rashaadRow).getAllByRole('cell').map((c) => c.className)).toEqual([
-      'appearances__cell appearances__cell--playing',
-      'appearances__cell appearances__cell--off',
-      'appearances__cell appearances__cell--goalkeeper',
-      'appearances__cell appearances__cell--goalkeeper',
-      'appearances__cell appearances__cell--goalkeeper',
-      'appearances__cell appearances__cell--playing',
-      'appearances__cell appearances__cell--playing',
-      'appearances__cell appearances__cell--playing',
+    expect(within(rashaadRow).getAllByRole('cell').map((c) => c.querySelector('.appearances__block')!.className)).toEqual([
+      'appearances__block appearances__block--playing',
+      'appearances__block appearances__block--off',
+      'appearances__block appearances__block--goalkeeper',
+      'appearances__block appearances__block--goalkeeper',
+      'appearances__block appearances__block--goalkeeper',
+      'appearances__block appearances__block--playing',
+      'appearances__block appearances__block--playing',
+      'appearances__block appearances__block--playing',
     ])
     expect(within(table).getAllByRole('rowheader')).toHaveLength(13)
     const fixtures = screen.getByRole('region', { name: 'Fixtures' })
