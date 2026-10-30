@@ -255,18 +255,20 @@
 .appearances__block {
   display: inline-grid;
   place-items: center;
-  width: 30px;
+  width: 32px;
   height: 30px;
   border-radius: var(--radius-sm);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
+
 
 .appearances__block--playing {
   background: var(--color-on);
+  color: var(--color-ink);
 }
 
 .appearances__block--off {

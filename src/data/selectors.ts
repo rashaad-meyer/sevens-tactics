@@ -110,6 +110,8 @@ export type HalfStatus = 'playing' | 'goalkeeper' | 'off'
 export interface HalfAvailability {
   readonly sheet: TeamSheet
   readonly status: HalfStatus
+  /** The slot the player fills in this half, or null when they are off. */
+  readonly slot: SlotId | null
 }
 
 export interface PlayerAvailability {
@@ -118,9 +120,15 @@ export interface PlayerAvailability {
   readonly halves: readonly HalfAvailability[]
 }
 
+export function playerSlot(sheet: TeamSheet, playerId: Player['id']): SlotId | null {
+  const entry = (Object.entries(sheet.lineup) as [SlotId, Player['id']][]).find(([, id]) => id === playerId)
+  return entry ? entry[0] : null
+}
+
 export function halfStatus(sheet: TeamSheet, playerId: Player['id']): HalfStatus {
-  if (sheet.lineup[GK_SLOT] === playerId) return 'goalkeeper'
-  return Object.values(sheet.lineup).includes(playerId) ? 'playing' : 'off'
+  const slot = playerSlot(sheet, playerId)
+  if (slot === null) return 'off'
+  return slot === GK_SLOT ? 'goalkeeper' : 'playing'
 }
 
 /** Every player's status in every half, players alphabetical by name. */
@@ -129,6 +137,10 @@ export function getAvailability(sheets: readonly TeamSheet[] = TEAM_SHEETS): rea
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((player) => ({
       player,
-      halves: sheets.map((sheet) => ({ sheet, status: halfStatus(sheet, player.id) })),
+      halves: sheets.map((sheet) => ({
+        sheet,
+        status: halfStatus(sheet, player.id),
+        slot: playerSlot(sheet, player.id),
+      })),
     }))
 }

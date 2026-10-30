@@ -67,8 +67,12 @@ describe('app routing', () => {
     const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
     expect(within(table).getByRole('columnheader', { name: 'Game 2, half 1' })).toBeInTheDocument()
     const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!
-    expect(within(adamRow).getAllByRole('cell').map((c) => c.textContent)).toEqual([
-      'Playing', 'Off', 'Playing', 'Playing', 'Off', 'Off', 'Off', 'Playing',
+    expect(within(adamRow).getAllByRole('cell').map((c) => c.querySelector('.visually-hidden')!.textContent)).toEqual([
+      'Playing: Striker', 'Off', 'Playing: Striker', 'Playing: Right defender',
+      'Off', 'Off', 'Off', 'Playing: Striker',
+    ])
+    expect(within(adamRow).getAllByRole('cell').map((c) => c.querySelector('.appearances__block')!.textContent)).toEqual([
+      'ST', '', 'ST', 'RCB', '', '', '', 'ST',
     ])
     const rashaadRow = within(table).getByRole('rowheader', { name: 'Rashaad' }).closest('tr')!
     expect(within(rashaadRow).getAllByRole('cell').map((c) => c.querySelector('.appearances__block')!.className)).toEqual([

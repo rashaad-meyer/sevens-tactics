@@ -1,5 +1,6 @@
 import { useId, useState, type ChangeEvent } from 'react'
 import { getFixture, halfStartTime } from '../../data/fixtures'
+import { FORMATION_231 } from '../../data/formation'
 import {
   formatSheetLabel,
   getAvailability,
@@ -7,14 +8,19 @@ import {
   type PlayerAvailability,
 } from '../../data/selectors'
 import { TEAM_SHEETS } from '../../data/teamSheets'
-import type { PlayerId } from '../../data/types'
+import type { PlayerId, SlotId } from '../../data/types'
 
 type Selection = 'all' | PlayerId
 
-const STATUS_TEXT: Record<HalfStatus, string> = {
-  playing: 'Playing',
-  goalkeeper: 'In goal',
-  off: 'Off',
+const SLOT_LABEL: Readonly<Record<SlotId, string>> = Object.fromEntries(
+  FORMATION_231.map((slot) => [slot.slotId, slot.label]),
+) as Record<SlotId, string>
+
+/** Screen-reader text for one cell; the visible block shows just the slot code. */
+function cellText(status: HalfStatus, slot: SlotId | null): string {
+  if (status === 'off' || slot === null) return 'Off'
+  if (status === 'goalkeeper') return 'In goal'
+  return `Playing: ${SLOT_LABEL[slot]}`
 }
 
 const LEGEND: readonly { status: HalfStatus; label: string }[] = [
@@ -47,12 +53,12 @@ function AvailabilityGrid({ rows }: { rows: readonly PlayerAvailability[] }) {
             {rows.map(({ player, halves }) => (
               <tr key={player.id}>
                 <th scope="row">{player.name}</th>
-                {halves.map(({ sheet, status }) => (
+                {halves.map(({ sheet, status, slot }) => (
                   <td key={sheet.key} className="appearances__cell">
                     <span className={`appearances__block appearances__block--${status}`} aria-hidden="true">
-                      {status === 'goalkeeper' ? 'GK' : ''}
+                      {slot ?? ''}
                     </span>
-                    <span className="visually-hidden">{STATUS_TEXT[status]}</span>
+                    <span className="visually-hidden">{cellText(status, slot)}</span>
                   </td>
                 ))}
               </tr>

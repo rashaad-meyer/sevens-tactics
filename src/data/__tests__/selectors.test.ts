@@ -102,6 +102,9 @@ describe('getAvailability', () => {
       'goalkeeper', 'goalkeeper', 'playing', 'off', 'playing', 'goalkeeper', 'goalkeeper', 'goalkeeper',
     ])
     expect(byName('Declan')).toEqual(['off', 'playing', 'off', 'playing', 'off', 'playing', 'playing', 'off'])
+    const slots = (name: string) => rows.find((r) => r.player.name === name)!.halves.map((h) => h.slot)
+    expect(slots('Rashaad')).toEqual(['CM', null, 'GK', 'GK', 'GK', 'ST', 'ST', 'CM'])
+    expect(slots('Cass')).toEqual(['LM', null, 'RM', 'RM', null, null, 'RM', null])
   })
 
   it('agrees with the halves-played totals', () => {
