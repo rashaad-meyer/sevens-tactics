@@ -72,7 +72,7 @@ describe('team sheet data integrity', () => {
     })
     expect(lineup('g3h2')).toMatchObject({ CM: 'angelo' })
     expect(lineup('g3h1')).toMatchObject({ ST: 'jayden', GK: 'rashaad' })
-    expect(lineup('g4h1')).toMatchObject({ CM: 'declan' })
+    expect(lineup('g4h1')).toMatchObject({ ST: 'alex', CM: 'rashaad', RCB: 'declan' })
     expect(lineup('g4h2')).toMatchObject({ CM: 'rashaad', LCB: 'tumelo', RCB: 'alex' })
     expect(SQUAD.some((p) => p.name === 'James')).toBe(false)
   })

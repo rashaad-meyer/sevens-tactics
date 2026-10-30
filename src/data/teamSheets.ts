@@ -9,6 +9,7 @@ import type { TeamSheet } from './types'
  * G4H2 (Rashaad in at CM) so that both play four outfield halves.
  * G3H1: Jayden ST in place of Cass, with Rashaad in goal.
  * G2H2: Cass in for Jayden; Hannah ST, Laura LM, Cass RM, Adam back to RCB.
+ * G4H1: Alex ST, Rashaad CM, Declan RCB (same seven players, positions rotated).
  */
 export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
   {
@@ -100,12 +101,12 @@ export const TEAM_SHEETS: readonly TeamSheet[] = Object.freeze([
     game: 4,
     half: 1,
     lineup: {
-      ST: 'rashaad',
+      ST: 'alex',
       LM: 'laurie-ann',
-      CM: 'declan',
+      CM: 'rashaad',
       RM: 'cass',
       LCB: 'josh',
-      RCB: 'alex',
+      RCB: 'declan',
       GK: 'jayden',
     },
   },

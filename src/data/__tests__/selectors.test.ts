@@ -103,7 +103,7 @@ describe('getAvailability', () => {
     ])
     expect(byName('Declan')).toEqual(['off', 'playing', 'off', 'playing', 'off', 'playing', 'playing', 'off'])
     const slots = (name: string) => rows.find((r) => r.player.name === name)!.halves.map((h) => h.slot)
-    expect(slots('Rashaad')).toEqual(['CM', null, 'GK', 'GK', 'GK', 'ST', 'ST', 'CM'])
+    expect(slots('Rashaad')).toEqual(['CM', null, 'GK', 'GK', 'GK', 'ST', 'CM', 'CM'])
     expect(slots('Cass')).toEqual(['LM', null, 'RM', 'RM', null, null, 'RM', null])
   })
 
