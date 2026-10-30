@@ -65,11 +65,51 @@ describe('app routing', () => {
     expect(jayden.textContent).toContain('3 (+5 in goal)')
     expect(screen.getByText(/Minimum 2 girls/)).toBeInTheDocument()
     const table = within(screen.getByRole('region', { name: 'Who plays when' })).getByRole('table')
+    expect(within(table).getByRole('columnheader', { name: 'Game 2, half 1' })).toBeInTheDocument()
     const adamRow = within(table).getByRole('rowheader', { name: 'Adam' }).closest('tr')!
     expect(within(adamRow).getAllByRole('cell').map((c) => c.textContent)).toEqual([
-      '1,1', '2,1', '2,2', '4,2', '', '', '', '',
+      'Playing', 'Off', 'Playing', 'Playing', 'Off', 'Off', 'Off', 'Playing',
+    ])
+    const rashaadRow = within(table).getByRole('rowheader', { name: 'Rashaad' }).closest('tr')!
+    expect(within(rashaadRow).getAllByRole('cell').map((c) => c.className)).toEqual([
+      'appearances__cell appearances__cell--playing',
+      'appearances__cell appearances__cell--off',
+      'appearances__cell appearances__cell--goalkeeper',
+      'appearances__cell appearances__cell--goalkeeper',
+      'appearances__cell appearances__cell--goalkeeper',
+      'appearances__cell appearances__cell--playing',
+      'appearances__cell appearances__cell--playing',
+      'appearances__cell appearances__cell--playing',
     ])
     expect(within(table).getAllByRole('rowheader')).toHaveLength(13)
+    const fixtures = screen.getByRole('region', { name: 'Fixtures' })
+    expect(within(fixtures).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+      '9:00Game 1 v Evol FC',
+      '10:00Game 2 v ASSassins FC',
+      '11:00Game 3 v The Lions Leftovers',
+      '12:00Game 4 v Burango FC',
+    ])
+  })
+
+  it("shows one player's schedule with times and opponents when they are picked", async () => {
+    const user = userEvent.setup()
+    renderAt('/summary')
+    const card = await screen.findByRole('region', { name: 'Who plays when' })
+    await user.selectOptions(within(card).getByRole('combobox', { name: 'Show' }), 'Rashaad')
+    expect(within(card).queryByRole('table')).not.toBeInTheDocument()
+    expect(within(card).getByText('Rashaad plays 7 of 8 halves, 3 in goal.')).toBeInTheDocument()
+    const items = within(card).getAllByRole('listitem')
+    expect(items.map((li) => li.textContent)).toEqual([
+      'Game 1 | Half 19:00 · v Evol FC',
+      'Game 2 | Half 110:00 · v ASSassins FCIn goal',
+      'Game 2 | Half 210:15 · v ASSassins FCIn goal',
+      'Game 3 | Half 111:00 · v The Lions LeftoversIn goal',
+      'Game 3 | Half 211:15 · v The Lions Leftovers',
+      'Game 4 | Half 112:00 · v Burango FC',
+      'Game 4 | Half 212:15 · v Burango FC',
+    ])
+    await user.selectOptions(within(card).getByRole('combobox', { name: 'Show' }), 'All players')
+    expect(within(card).getByRole('table')).toBeInTheDocument()
   })
 
   it('redirects /tactics to the Attack shape and swaps the header select', async () => {

@@ -11,9 +11,11 @@ cd "$(dirname "$0")/.."
 
 pnpm build
 
-# Long-lived, content-hashed assets.
+# Long-lived, content-hashed assets. Old files are deliberately kept: a tab opened
+# before this deploy still points at the previous chunk names, and deleting them
+# would break its first visit to a lazy route (the Tactics page).
 aws s3 sync dist/assets "s3://${BUCKET}/assets" \
-  --region "$REGION" --delete \
+  --region "$REGION" \
   --cache-control "public, max-age=31536000, immutable"
 
 # Everything else at the root (index.html, favicon). Short cache so a new deploy shows up fast.

@@ -105,31 +105,30 @@ export function getHalvesPlayed(sheets: readonly TeamSheet[] = TEAM_SHEETS): rea
   })
 }
 
-export interface Appearance {
-  readonly game: GameNumber
-  readonly half: HalfNumber
-  readonly inGoal: boolean
+export type HalfStatus = 'playing' | 'goalkeeper' | 'off'
+
+export interface HalfAvailability {
+  readonly sheet: TeamSheet
+  readonly status: HalfStatus
 }
 
-export interface PlayerAppearances {
+export interface PlayerAvailability {
   readonly player: Player
-  readonly appearances: readonly Appearance[]
+  /** One entry per sheet, in game/half order. */
+  readonly halves: readonly HalfAvailability[]
 }
 
-/** Each player's halves in playing order, players alphabetical by name. */
-export function getAppearances(sheets: readonly TeamSheet[] = TEAM_SHEETS): readonly PlayerAppearances[] {
+export function halfStatus(sheet: TeamSheet, playerId: Player['id']): HalfStatus {
+  if (sheet.lineup[GK_SLOT] === playerId) return 'goalkeeper'
+  return Object.values(sheet.lineup).includes(playerId) ? 'playing' : 'off'
+}
+
+/** Every player's status in every half, players alphabetical by name. */
+export function getAvailability(sheets: readonly TeamSheet[] = TEAM_SHEETS): readonly PlayerAvailability[] {
   return [...SQUAD]
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((player) => ({
       player,
-      appearances: sheets.flatMap((sheet) =>
-        (Object.entries(sheet.lineup) as [SlotId, Player['id']][])
-          .filter(([, id]) => id === player.id)
-          .map(([slot]) => ({ game: sheet.game, half: sheet.half, inGoal: slot === GK_SLOT })),
-      ),
+      halves: sheets.map((sheet) => ({ sheet, status: halfStatus(sheet, player.id) })),
     }))
-}
-
-export function formatAppearance(appearance: Appearance): string {
-  return `${appearance.game},${appearance.half}${appearance.inGoal ? ' GK' : ''}`
 }

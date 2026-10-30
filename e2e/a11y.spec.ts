@@ -7,7 +7,7 @@ test.describe('accessibility', () => {
   for (const route of ROUTES) {
     test(`${route} has no axe violations`, async ({ page }) => {
       await page.goto(route)
-      await expect(page.getByRole('combobox')).toBeVisible()
+      await expect(page.getByRole('combobox').first()).toBeVisible()
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
         .analyze()

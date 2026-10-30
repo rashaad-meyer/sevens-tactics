@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { displayName, getPlayer } from '../players'
 import {
-  formatAppearance,
   formatSheetLabel,
-  getAppearances,
+  getAvailability,
   getAdjacentSheet,
   getSheet,
   getSheetOptions,
@@ -89,30 +88,25 @@ describe('players', () => {
   })
 })
 
-describe('getAppearances', () => {
-  it('lists players alphabetically with their halves in playing order', () => {
-    const rows = getAppearances()
+describe('getAvailability', () => {
+  it('lists players alphabetically with a status for every half', () => {
+    const rows = getAvailability()
     expect(rows.map((r) => r.player.name)).toEqual([
       'Adam', 'Alex', 'Angelo', 'Cass', 'Declan', 'Hannah',
       'Jayden', 'Josh', 'Laura', 'Laurie Ann', 'Maria', 'Rashaad', 'Tumelo',
     ])
-    const adam = rows.find((r) => r.player.name === 'Adam')!
-    expect(adam.appearances.map(formatAppearance)).toEqual(['1,1', '2,1', '2,2', '4,2'])
-    const jayden = rows.find((r) => r.player.name === 'Jayden')!
-    expect(jayden.appearances.map(formatAppearance)).toEqual([
-      '1,1 GK', '1,2 GK', '2,1', '2,2', '3,1', '3,2 GK', '4,1 GK', '4,2 GK',
+    for (const row of rows) expect(row.halves.map((h) => h.sheet.key)).toEqual(TEAM_SHEETS.map((s) => s.key))
+    const byName = (name: string) => rows.find((r) => r.player.name === name)!.halves.map((h) => h.status)
+    expect(byName('Adam')).toEqual(['playing', 'off', 'playing', 'playing', 'off', 'off', 'off', 'playing'])
+    expect(byName('Jayden')).toEqual([
+      'goalkeeper', 'goalkeeper', 'playing', 'playing', 'playing', 'goalkeeper', 'goalkeeper', 'goalkeeper',
     ])
-    const declan = rows.find((r) => r.player.name === 'Declan')!
-    expect(declan.appearances.map(formatAppearance)).toEqual(['1,2', '2,2', '3,2', '4,1'])
-    const rashaad = rows.find((r) => r.player.name === 'Rashaad')!
-    expect(rashaad.appearances.map(formatAppearance)).toEqual(['1,1', '2,1 GK', '2,2 GK', '3,1 GK', '3,2', '4,1', '4,2'])
+    expect(byName('Declan')).toEqual(['off', 'playing', 'off', 'playing', 'off', 'playing', 'playing', 'off'])
   })
 
   it('agrees with the halves-played totals', () => {
-    for (const row of getAppearances()) {
-      expect(row.appearances.length).toBeGreaterThan(0)
-      expect(row.appearances.length).toBeLessThanOrEqual(8)
-    }
-    expect(getAppearances().reduce((n, r) => n + r.appearances.length, 0)).toBe(8 * 7)
+    const onPitch = getAvailability().flatMap((r) => r.halves.filter((h) => h.status !== 'off'))
+    expect(onPitch).toHaveLength(8 * 7)
+    expect(onPitch.filter((h) => h.status === 'goalkeeper')).toHaveLength(8)
   })
 })

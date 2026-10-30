@@ -144,13 +144,55 @@
 
 /* Who plays when ----------------------------------------------------- */
 
+.summary__card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.summary__card-head h2 {
+  margin: 0;
+}
+
+.summary__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-muted);
+}
+
+.summary__filter select {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+}
+
 .summary__hint {
   margin: 0 0 var(--space-3);
   color: var(--color-ink-muted);
   font-size: var(--text-sm);
 }
 
+.summary__hint--after {
+  margin: var(--space-3) 0 0;
+}
+
 .summary__scroll {
+  position: relative; /* contain the visually-hidden labels inside the scroll area */
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin-inline: calc(var(--space-4) * -1);
@@ -158,53 +200,148 @@
 }
 
 .appearances {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 3px;
   width: max-content;
   min-width: 100%;
-  font-variant-numeric: tabular-nums;
+  margin-inline: -3px;
   font-size: var(--text-sm);
 }
 
-.appearances th,
-.appearances td {
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-rule);
-  text-align: center;
+.appearances th {
+  font-family: var(--font-display);
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .appearances thead th {
-  font-family: var(--font-display);
-  font-weight: 700;
-  text-transform: uppercase;
+  padding: 0 0 var(--space-1);
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
   color: var(--color-ink-muted);
-  border-bottom: 2px solid var(--color-ink);
+  text-align: center;
+}
+
+.appearances thead th:first-child,
+.appearances tbody th {
+  text-align: left;
+  padding-right: var(--space-3);
 }
 
 .appearances tbody th {
   position: sticky;
   left: 0;
   background: var(--color-surface);
-  text-align: left;
+  font-size: var(--text-base);
   font-weight: 600;
-  padding-left: 0;
 }
 
-.appearances td {
+.appearances__cell {
+  min-width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  text-align: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--text-base);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
 }
 
-.appearances__gk {
-  color: var(--color-ink-muted);
-  font-style: italic;
+.appearances__cell--playing {
+  background: var(--color-on);
 }
 
-.appearances tr:last-child th,
-.appearances tr:last-child td {
+.appearances__cell--off {
+  background: var(--color-off);
+}
+
+.appearances__cell--goalkeeper {
+  background: var(--color-keeper);
+  color: var(--color-keeper-ink);
+}
+
+.appearances-legend {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.appearances-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.appearances-legend__swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.schedule__item:last-child {
   border-bottom: 0;
+}
+
+.schedule__label {
+  font-size: var(--text-lg);
+}
+
+.schedule__meta {
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.schedule__badge {
+  margin-left: auto;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-keeper);
+  color: var(--color-keeper-ink);
+  font-size: var(--text-sm);
+}
+
+.fixtures {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fixtures__item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.fixtures__item:last-child {
+  border-bottom: 0;
+}
+
+.fixtures__time {
+  min-width: 3.5rem;
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 640px) {

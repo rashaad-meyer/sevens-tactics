@@ -10,10 +10,12 @@ import { NotFoundPage } from '../pages/NotFoundPage'
 import { SummaryPage } from '../pages/SummaryPage'
 import { TeamSheetPage } from '../pages/TeamSheetPage'
 import { AppLayout } from './AppLayout'
+import { importWithReload } from './importWithReload'
 
-// Code-split so future animation code never lands in the team-sheet bundle.
-const TacticsPage = lazy(() =>
-  import('../pages/TacticsPage').then((m) => ({ default: m.TacticsPage })),
+// Code-split so the animation code never lands in the team-sheet bundle. If the
+// chunk is missing because a deploy happened while this tab was open, reload once.
+const TacticsPage = lazy(
+  importWithReload(() => import('../pages/TacticsPage').then((m) => ({ default: m.TacticsPage }))),
 )
 
 export const routes: RouteObject[] = [

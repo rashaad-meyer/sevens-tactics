@@ -29,6 +29,12 @@
   --color-neutral: oklch(97% 0 0);
   --color-neutral-ink: var(--color-ink);
 
+  /* Who-plays-when grid */
+  --color-on: oklch(70% 0.17 145);
+  --color-off: oklch(60% 0.2 25);
+  --color-keeper: oklch(50% 0.18 258);
+  --color-keeper-ink: oklch(100% 0 0);
+
   /* Name plates under the circles: white on green, dark text */
   --color-plate: oklch(100% 0 0);
   --color-plate-ink: var(--color-ink);
